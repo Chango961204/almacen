@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum RolNombre {
+  SUPER_ADMIN
+  ADMIN
+  USUARIO
+}
+
+model Rol {
+  id       Int       @id @default(autoincrement())
+  nombre   RolNombre @unique
+  creadoEn DateTime  @default(now())
+
+  usuarios Usuario[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  id           Int      @id @default(autoincrement())
+  nombre       String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(150)
+  password     String   @db.VarChar(255)
+  activo       Boolean  @default(true)
+  rolId        Int
+  creadoEn     DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  rol Rol @relation(fields: [rolId], references: [id])
+
+  @@index([rolId])
+  @@map("usuarios")
+}

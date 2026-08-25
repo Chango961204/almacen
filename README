@@ -1,0 +1,16 @@
+cd inventario 
+-docker compose up -d (levanta el contenedor MYSQL)
+cd backend 
+-npm install (instala las dependencias)
+-npx prisma init (primero tienes que eliminar shadowDatabaseUrl del archivo prisma.config.ts pero si ya tienes la carpeta prisma omite este paso)
+-npx prisma generate
+-npx prisma migrate dev --name init (nombre de la migración) (crea la base de datos y las tablas) 
+-npx prisma studio (abre la interfaz de la base de datos)
+-npm run prisma:seed(crea el superAdmin)
+-npm run dev (levanta el backend)
+
+cd frontend
+-npm install (instala las dependencias)
+-npm run dev (levanta el frontend)
+
+
