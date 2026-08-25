@@ -7,11 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ======================================================
+// ENUMS
+// ======================================================
+
 enum RolNombre {
   SUPER_ADMIN
   ADMIN
   USUARIO
 }
+
+enum EstadoMovimiento {
+  ACTIVO
+  ANULADO
+}
+
+// ======================================================
+// ROLES
+// ======================================================
 
 model Rol {
   id       Int       @id @default(autoincrement())
@@ -23,18 +36,326 @@ model Rol {
   @@map("roles")
 }
 
+// ======================================================
+// USUARIOS
+// ======================================================
+
 model Usuario {
-  id           Int      @id @default(autoincrement())
-  nombre       String   @db.VarChar(100)
-  email        String   @unique @db.VarChar(150)
-  password     String   @db.VarChar(255)
-  activo       Boolean  @default(true)
-  rolId        Int
-  creadoEn     DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  nombre        String   @db.VarChar(100)
+  email         String   @unique @db.VarChar(150)
+  password      String   @db.VarChar(255)
+  activo        Boolean  @default(true)
+  rolId         Int
+  creadoEn      DateTime @default(now())
   actualizadoEn DateTime @updatedAt
 
-  rol Rol @relation(fields: [rolId], references: [id])
+  rol Rol @relation(fields: [rolId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  entradas     Entrada[]    @relation("UsuarioEntradas")
+  salidas      Salida[]     @relation("UsuarioSalidas")
+  devoluciones Devolucion[] @relation("UsuarioDevoluciones")
+  auditorias   Auditoria[]
 
   @@index([rolId])
   @@map("usuarios")
+}
+
+// ======================================================
+// PROYECTOS
+// ======================================================
+
+model Proyecto {
+  id          Int       @id @default(autoincrement())
+  nombre      String    @unique @db.VarChar(100)
+  descripcion String?   @db.Text
+  fechaInicio DateTime? @db.Date
+  fechaFin    DateTime? @db.Date
+  activo      Boolean   @default(true)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  entradas    EntradaDetalle[]
+  salidas     Salida[]
+  inventarios InventarioProyecto[]
+
+  @@map("proyectos")
+}
+
+// ======================================================
+// MARCAS
+// ======================================================
+
+model Marca {
+  id     Int     @id @default(autoincrement())
+  nombre String  @unique @db.VarChar(100)
+  activo Boolean @default(true)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  articulos Articulo[]
+
+  @@map("marcas")
+}
+
+// ======================================================
+// UNIDADES DE MEDIDA
+// ======================================================
+
+model UnidadMedida {
+  id      Int     @id @default(autoincrement())
+  nombre  String  @unique @db.VarChar(50)
+  simbolo String  @unique @db.VarChar(20)
+  activo  Boolean @default(true)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  articulos Articulo[]
+
+  @@map("unidades_medida")
+}
+
+// ======================================================
+// ARTICULOS
+// ======================================================
+
+model Articulo {
+  id               Int     @id @default(autoincrement())
+  codigo           String? @unique @db.VarChar(50)
+  nombre           String  @db.VarChar(100)
+  especificaciones String? @db.Text
+  marcaId          Int
+  unidadMedidaId   Int
+  activo           Boolean @default(true)
+
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  marca        Marca        @relation(fields: [marcaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  unidadMedida UnidadMedida @relation(fields: [unidadMedidaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  entradas            EntradaDetalle[]
+  salidas             SalidaDetalle[]
+  inventarioAlmacen   InventarioAlmacen?
+  inventariosProyecto InventarioProyecto[]
+
+  @@index([marcaId])
+  @@index([unidadMedidaId])
+  @@map("articulos")
+}
+
+// ======================================================
+// ENTRADAS GENERALES AL ALMACEN
+// ======================================================
+
+model Entrada {
+  id               Int              @id @default(autoincrement())
+  folioFactura     String?          @db.VarChar(50)
+  folioRequisicion String?          @db.VarChar(50)
+  fechaRecepcion   DateTime
+  proveedor        String?          @db.VarChar(150)
+  distribuidor     String?          @db.VarChar(150)
+  observaciones    String?          @db.Text
+  estado           EstadoMovimiento @default(ACTIVO)
+
+  creadoPorId   Int
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  creadoPor Usuario @relation("UsuarioEntradas", fields: [creadoPorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  detalles EntradaDetalle[]
+
+  @@index([creadoPorId])
+  @@index([fechaRecepcion])
+  @@index([folioFactura])
+  @@map("entradas")
+}
+
+// ======================================================
+// DETALLE DE ENTRADA
+// Una entrada general puede distribuirse entre
+// diferentes proyectos
+// ======================================================
+
+model EntradaDetalle {
+  id         Int     @id @default(autoincrement())
+  entradaId  Int
+  proyectoId Int
+  articuloId Int
+  cantidad   Decimal @db.Decimal(18, 3)
+
+  creadoEn DateTime @default(now())
+
+  entrada  Entrada  @relation(fields: [entradaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  proyecto Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  articulo Articulo @relation(fields: [articuloId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([entradaId, proyectoId, articuloId])
+  @@index([proyectoId])
+  @@index([articuloId])
+  @@map("entrada_detalles")
+}
+
+// ======================================================
+// SALIDAS
+// Una salida siempre pertenece a un proyecto
+// ======================================================
+
+model Salida {
+  id            Int              @id @default(autoincrement())
+  folio         String           @unique @db.VarChar(50)
+  proyectoId    Int
+  fecha         DateTime
+  responsable   String?          @db.VarChar(150)
+  observaciones String?          @db.Text
+  estado        EstadoMovimiento @default(ACTIVO)
+
+  creadoPorId   Int
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  proyecto  Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  creadoPor Usuario  @relation("UsuarioSalidas", fields: [creadoPorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  detalles     SalidaDetalle[]
+  devoluciones Devolucion[]
+
+  @@index([proyectoId])
+  @@index([fecha])
+  @@index([creadoPorId])
+  @@map("salidas")
+}
+
+// ======================================================
+// DETALLE DE SALIDA
+// ======================================================
+
+model SalidaDetalle {
+  id         Int     @id @default(autoincrement())
+  salidaId   Int
+  articuloId Int
+  cantidad   Decimal @db.Decimal(18, 3)
+
+  creadoEn DateTime @default(now())
+
+  salida   Salida   @relation(fields: [salidaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  articulo Articulo @relation(fields: [articuloId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  devoluciones DevolucionDetalle[]
+
+  @@unique([salidaId, articuloId])
+  @@index([articuloId])
+  @@map("salida_detalles")
+}
+
+// ======================================================
+// DEVOLUCIONES
+// Una devolución pertenece a una salida
+// ======================================================
+
+model Devolucion {
+  id       Int              @id @default(autoincrement())
+  folio    String           @unique @db.VarChar(50)
+  salidaId Int
+  fecha    DateTime
+  motivo   String           @db.Text
+  estado   EstadoMovimiento @default(ACTIVO)
+
+  creadoPorId   Int
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  salida    Salida  @relation(fields: [salidaId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  creadoPor Usuario @relation("UsuarioDevoluciones", fields: [creadoPorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  detalles DevolucionDetalle[]
+
+  @@index([salidaId])
+  @@index([fecha])
+  @@index([creadoPorId])
+  @@map("devoluciones")
+}
+
+// ======================================================
+// DETALLE DE DEVOLUCION
+// ======================================================
+
+model DevolucionDetalle {
+  id              Int     @id @default(autoincrement())
+  devolucionId    Int
+  salidaDetalleId Int
+  cantidad        Decimal @db.Decimal(18, 3)
+
+  creadoEn DateTime @default(now())
+
+  devolucion    Devolucion    @relation(fields: [devolucionId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  salidaDetalle SalidaDetalle @relation(fields: [salidaDetalleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([devolucionId, salidaDetalleId])
+  @@index([salidaDetalleId])
+  @@map("devolucion_detalles")
+}
+
+// ======================================================
+// INVENTARIO GENERAL DEL ALMACEN
+// Una fila por articulo
+// ======================================================
+
+model InventarioAlmacen {
+  id             Int     @id @default(autoincrement())
+  articuloId     Int     @unique
+  cantidadActual Decimal @default(0) @db.Decimal(18, 3)
+
+  actualizadoEn DateTime @updatedAt
+
+  articulo Articulo @relation(fields: [articuloId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@map("inventario_almacen")
+}
+
+// ======================================================
+// INVENTARIO POR PROYECTO
+// Una fila por proyecto + articulo
+// ======================================================
+
+model InventarioProyecto {
+  id             Int     @id @default(autoincrement())
+  proyectoId     Int
+  articuloId     Int
+  cantidadActual Decimal @default(0) @db.Decimal(18, 3)
+
+  actualizadoEn DateTime @updatedAt
+
+  proyecto Proyecto @relation(fields: [proyectoId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  articulo Articulo @relation(fields: [articuloId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@unique([proyectoId, articuloId])
+  @@index([articuloId])
+  @@map("inventario_proyecto")
+}
+
+// ======================================================
+// AUDITORIA
+// ======================================================
+
+model Auditoria {
+  id          Int      @id @default(autoincrement())
+  usuarioId   Int
+  accion      String   @db.VarChar(50)
+  entidad     String   @db.VarChar(100)
+  entidadId   Int?
+  descripcion String?  @db.Text
+  datos       Json?
+  creadoEn    DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@index([usuarioId])
+  @@index([entidad, entidadId])
+  @@index([creadoEn])
+  @@map("auditorias")
 }
