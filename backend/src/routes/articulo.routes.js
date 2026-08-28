@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.usee(authMiddleware);
+router.use(authMiddleware);
 
 router.get("/", listarArticulos);
 router.get("/:id", obtenerArticulo);

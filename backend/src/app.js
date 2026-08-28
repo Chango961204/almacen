@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import morgan from "morgan"
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -41,6 +42,8 @@ const loginLimiter = rateLimit({
 });
 
 app.use("/api/auth/login", loginLimiter);
+
+app.use(morgan("dev"));
 
 app.use("/api", routes);
 

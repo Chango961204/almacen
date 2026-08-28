@@ -20,7 +20,7 @@ export const listarProyectos = async (req, res) => {
     });
 };
 
-export const obtenerProyecto = async(req, res)=>{
+export const obtenerProyectoPorId = async(req, res)=>{
     const id = Number(req.params.id);
     const proyecto = await proyectoService.obtenerProyecto(id);
     res.status(200).json({

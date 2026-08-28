@@ -41,7 +41,7 @@ export const crearArticulo = async (data) => {
 
 export const listarArticulos = () => {
     return articuloRepository.listarArticulos();
-},
+};
 
 export const obtenerArticulo = async (id) => {
     const articulo = await articuloRepository.obtenerArticulo(id);

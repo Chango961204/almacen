@@ -13,21 +13,21 @@ export const obtenerProyectos = () => {
             nombre: "asc",
         },
     });
+};
 
-    export const ObtenerProyectoPorId = (id) => {
-        return prisma.proyecto.findUnique({
-            where: {
-                id,
-            },
-        });
-    };
+export const ObtenerProyectoPorId = (id) => {
+    return prisma.proyecto.findUnique({
+        where: {
+            id,
+        },
+    });
+};
 
-    export const actualizarProyecto = (id, data) => {
-        return prisma.proyecto.update({
-            where: {
-                id,
-            },
-            data,
-        });
-    };
-}
+export const actualizarProyecto = (id, data) => {
+    return prisma.proyecto.update({
+        where: {
+            id,
+        },
+        data,
+    });
+};
