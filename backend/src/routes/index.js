@@ -8,6 +8,8 @@ import entradaRoutes from "./entrada.routes.js";
 import salidaRoutes from "./salida.routes.js";
 import devolucionRoutes from "./devolucion.routes.js";
 import inventarioRoutes from "./inventario.routes.js";
+import marcaRoutes from "./marca.routes.js";
+import unidadMedidaRoutes from "./unidadMedida.routes.js";
 
 const router = Router();
 
@@ -22,5 +24,7 @@ router.use("/salidas", salidaRoutes);
 router.use("/devoluciones", devolucionRoutes);
 
 router.use("/inventario", inventarioRoutes);
+router.use("/marcas", marcaRoutes);
+router.use("unidadMedida", unidadMedidaRoutes);
 
 export default router;

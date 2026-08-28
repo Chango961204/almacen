@@ -17,7 +17,8 @@ export const detalleEntradaSchema = z.object({
     cantidad: z
         .coerce
         .number()
-        .positive,
+        .positive("La cantidad debe ser mayor a cero"),
+
 
 
 });
@@ -27,13 +28,16 @@ export const crearEntradaSchema = z.object({
         .string()
         .trim()
         .max(50)
-        .optional(),
+        .optional()
+        .or(z.literal("")),
 
-    foloRequisicion: z
+    folioRequisicion: z
         .string()
         .trim()
         .max(50)
-        .optional(),
+        .optional()
+        .or(z.literal("")),
+
 
     fechaRecepcion: z
         .string()
@@ -43,19 +47,25 @@ export const crearEntradaSchema = z.object({
         .string()
         .trim()
         .max(150)
-        .optional(),
+        .optional()
+        .or(z.literal("")),
+
 
     distribuidor: z
         .string()
         .trim()
         .max(150)
-        .optional(),
+        .optional()
+        .or(z.literal("")),
+
 
     observaciones: z
         .string()
         .trim()
         .max(30000)
-        .optional(),
+        .optional()
+        .or(z.literal("")),
+
 
     detalles: z
         .array(detalleEntradaSchema)
