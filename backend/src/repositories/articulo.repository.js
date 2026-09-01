@@ -30,3 +30,14 @@ export const actualizarArticulo = (id, data) => {
         data,
     });
 };
+
+export const eliminarArticulo = (id) => {
+    return prisma.articulo.update({
+        where: {
+            id,
+        },
+        data: {
+            activo: false,
+        },
+    });
+};

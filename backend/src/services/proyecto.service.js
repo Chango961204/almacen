@@ -2,19 +2,19 @@ import  * as proyectoRepository from "../repositories/proyecto.repository.js";
 
 export const crearProyecto = async (data) => {
     const proyectoExistente =
-        await proectoRepository.obtenerProyectos();
+        await proyectoRepository.obtenerProyectos();
 
     const existe = proyectoExistente.some(
         (p) => p.nombre.toLowerCase() === data.nombre.toLowerCase()
     );
 
-    if (existente) {
+    if (existe) {
         const error = new Error("Ya existe un proyecto con ese nombre");
-        error.status = 400;
+        error.statusCode = 400;
         throw error;
     }
 
-    return poyectoRepository.crearProyecto({
+    return proyectoRepository.crearProyecto({
         nombre: data.nombre,
         descripcion: data.descripcion || null,
         fechaInicio: data.fechaInicio
@@ -35,13 +35,13 @@ export const obtenerProyecto = async (id) => {
 
     if (!proyecto) {
         const error = new Error("Proyecto no encontrado");
-        error.status = 404;
+        error.statusCode = 404;
         throw error;
     }
     return proyecto;
 };
 
-export const ActualizarPrroyecto = async (id, date) => {
+export const ActualizarProyecto = async (id, data) => {
     await obtenerProyecto(id);
 
     return proyectoRepository.actualizarProyecto(id, {
@@ -53,4 +53,10 @@ export const ActualizarPrroyecto = async (id, date) => {
             ? new Date(data.fechaFin)
             : null,
     });
+};
+
+export const eliminarProyecto = async (id) => {
+    await obtenerProyecto(id);
+
+    return proyectoRepository.eliminarProyecto(id);
 };

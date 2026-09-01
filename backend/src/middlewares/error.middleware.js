@@ -32,6 +32,27 @@ export function errorMiddleware(error, req, res, next) {
         });
     }
 
+    if (error.statusCode) {
+        return res.status(error.statusCode).json({
+            success: false,
+            message: error.message,
+        });
+    }
+
+    if (error.code === "P2002") {
+        return res.status(409).json({
+            success: false,
+            message: "Ya existe un registro con esos datos",
+        });
+    }
+
+    if (error.code === "P2025") {
+        return res.status(404).json({
+            success: false,
+            message: "Registro no encontrado",
+        });
+    }
+
     return res.status(500).json({
         success: false,
         message: "Error interno del servidor",

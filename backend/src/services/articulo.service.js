@@ -4,7 +4,7 @@ import prisma from "../lib/prisma.js";
 
 export const crearArticulo = async (data) => {
     const proyectoExistente =
-        await articuloRepoitory.obtenerArticulos();
+        await articuloRepository.obtenerArticulos();
 
     const marca = await prisma.marca.findUnique({
         where: {
@@ -18,7 +18,7 @@ export const crearArticulo = async (data) => {
         throw error;
     }
 
-    const unidad = await prisma.unidad.findUnique({
+    const unidad = await prisma.unidadMedida.findUnique({
         where: {
             id: data.unidadMedidaId
         },
@@ -31,7 +31,7 @@ export const crearArticulo = async (data) => {
     }
 
     return articuloRepository.crearArticulo({
-        codigo: datacodigo || null,
+        codigo: data.codigo || null,
         nombre: data.nombre,
         especificaciones: data.especificaciones || null,
         marcaId: data.marcaId,
@@ -40,11 +40,11 @@ export const crearArticulo = async (data) => {
 };
 
 export const listarArticulos = () => {
-    return articuloRepository.listarArticulos();
+    return articuloRepository.obtenerArticulos();
 };
 
 export const obtenerArticulo = async (id) => {
-    const articulo = await articuloRepository.obtenerArticulo(id);
+    const articulo = await articuloRepository.obtenerArticuloPorId(id);
     if (!articulo) {
         const error = new Error("Articulo no encontrad");
         error.statusCode = 400;
@@ -58,4 +58,10 @@ export const actualizarArticulo = async (id, data) => {
     await obtenerArticulo(id);
 
     return articuloRepository.actualizarArticulo(id, data);
+};
+
+export const eliminarArticulo = async (id) => {
+    await obtenerArticulo(id);
+
+    return articuloRepository.eliminarArticulo(id);
 };

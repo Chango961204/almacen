@@ -25,6 +25,6 @@ router.use("/devoluciones", devolucionRoutes);
 
 router.use("/inventario", inventarioRoutes);
 router.use("/marcas", marcaRoutes);
-router.use("unidadMedida", unidadMedidaRoutes);
+router.use("/unidadMedida", unidadMedidaRoutes);
 
 export default router;

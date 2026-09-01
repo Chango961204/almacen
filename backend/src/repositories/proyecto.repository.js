@@ -31,3 +31,14 @@ export const actualizarProyecto = (id, data) => {
         data,
     });
 };
+
+export const eliminarProyecto = (id) => {
+    return prisma.proyecto.update({
+        where: {
+            id,
+        },
+        data: {
+            activo: false,
+        },
+    });
+};

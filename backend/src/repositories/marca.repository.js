@@ -6,7 +6,7 @@ export const crear = (data) => {
     });
 };
 
-export const obetenerTodas = () => {
+export const obtenerTodas = () => {
     return prisma.marca.findMany({
         orderBy: {
             nombre: "asc",

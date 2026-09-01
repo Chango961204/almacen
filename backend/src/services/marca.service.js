@@ -1,7 +1,7 @@
 import * as marcaRepository from "../repositories/marca.repository.js";
 
 export const crear = async (data) => {
-    const marcas = await marcaRepository.obetenerTodas();
+    const marcas = await marcaRepository.obtenerTodas();
 
     const existe = marcas.some(
         (marca) =>
@@ -19,8 +19,8 @@ export const crear = async (data) => {
     });
 };
 
-export const obtennerTodas = () => {
-    return marcaRepository.obetenerTodas();
+export const obtenerTodas = () => {
+    return marcaRepository.obtenerTodas();
 };
 
 export const obtenerPorId = async (id) => {
@@ -28,7 +28,7 @@ export const obtenerPorId = async (id) => {
 
     if (!marca) {
         const error = new Error("Marca no encontrada");
-        error.satusCode = 404;
+        error.statusCode = 404;
         throw error;
     }
     return marca;

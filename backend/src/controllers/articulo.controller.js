@@ -1,55 +1,68 @@
 import * as articuloService from "../services/articulo.service.js";
 
-export const crearArticulo = async (req, res) => {
-    const articulo = await articuloService.crearArticulo(req.body);
+export const crearArticulo = async (req, res, next) => {
+    try {
+        const articulo = await articuloService.crearArticulo(req.body);
 
-    res.status(201).json({
-        ok: true,
-        message: "Articulo creado correctamente",
-        data: articulo
-    });
+        res.status(201).json({
+            ok: true,
+            message: "Articulo creado correctamente",
+            data: articulo
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const listarArticulos = async (req, res) => {
-    const articulos = await articuloService.listarArticulos();
-
-    res.status(200).json({
-        ok: true,
-        message: "Lista de articulos",
-        data: articulos,
-    });
+export const listarArticulos = async (req, res, next) => {
+    try {
+        const articulos = await articuloService.listarArticulos();
+        res.json({
+            ok: true,
+            data: articulos,
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-export const obtenerArticulo = async (req, res) => {
-    const id = Number(req.params.id);
-    const articulo = await articuloService.obtenerArticulo(id);
+export const obtenerArticulo = async (req, res, next) => {
+    try {
+        const id = Number(req.params.id);
+        const articulo = await articuloService.obtenerArticulo(id);
+        res.json({
+            ok: true,
+            data: articulo,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
-    res.status(200).json({
-        ok: true,
-        message: "Articulo encontrado",
-        data: articulos,
-    });
+export const actualizarArticulo = async (req, res, next) => {
+    try {
+        const id = Number(req.params.id);
+        const articulo = await articuloService.actualizarArticulo(id, req.body);
+        res.json({
+            ok: true,
+            message: "Articulo actualizado correctamente",
+            data: articulo,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const eliminarArticulo = async (req, res, next) => {
+    try {
+        const id = Number(req.params.id);
+        const articulo = await articuloService.eliminarArticulo(id);
+        res.json({
+            ok: true,
+            message: "Articulo eliminado correctamente",
+            data: articulo,
+        });
+    } catch (error) {
+        next(error);
+    }
 }
-
-export const actualizarArticulo = async (req, res) => {
-    const id = Number(req.params.id);
-    const articulo = await articuloService.actualizarArticulo(id, req.body);
-
-    res.status(200).json({
-        ok: true,
-        message: "Articulo actualizado ",
-        data: articulos,
-    });
-}
-
-export const eliminarArticulo = async (req, res) => {
-    const id = Number(req.params.id);
-    const articulo = await articuloService.eliminarArticulo(id);
-
-    res.status(200).json({
-        ok: true,
-        message: "Articulo eliminado",
-        data: articulos,
-    });
-}
-
