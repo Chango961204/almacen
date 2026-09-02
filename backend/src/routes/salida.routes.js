@@ -2,12 +2,12 @@ import { Router } from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import { crearSalida } from "../controllers/salida.controller.js";
-import { detalleSalidaSchema } from "../validations/salida.validation.js";
+import { crearSalidaSchema } from "../validations/salida.validation.js";
+
 
 const router = Router();
 
 router.use(authMiddleware);
 
-router.post("/", validate(detalleSalidaSchema), crearSalida);
-
+router.post("/", validate(crearSalidaSchema), crearSalida);
 export default router;

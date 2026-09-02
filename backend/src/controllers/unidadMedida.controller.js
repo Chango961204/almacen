@@ -18,6 +18,7 @@ export const obtenerTodas = async (req, res, next) => {
     try {
         const unidadesMedida = await unidadMedidaService.obtenerTodas(req.body);
 
+
         res.json({
             ok: true,
             data: unidadesMedida,
@@ -30,7 +31,6 @@ export const obtenerTodas = async (req, res, next) => {
 export const obtenerPorId = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-
         const unidadMedida = await unidadMedidaService.obtenerPorId(id);
 
         res.json({
