@@ -1,37 +1,25 @@
-import { BrowserRouter, Navigate, Route, Routes, } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Home from "../pages/Home";
-import ProtectedRoute from "../components/ProtectedRoute";
+import Login from "../pages/Login.jsx";
+import Home from "../pages/Home.jsx";
+import ProtectedRoute from "../components/ProtectedRoute.jsx";
+import AppLayout from "../layouts/AppLayout.jsx";
 
 export default function AppRoutes() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
+                <Route path="/login" element={<Login />} />
 
-                <Route
-                    path="/"
-                    element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
-                    }
-                />
+                <Route path="/" element={<ProtectedRoute> <AppLayout /> </ProtectedRoute>} >
+                    <Route index element={<Home />} />
 
-                <Route
-                    path="*"
-                    element={
-                        <Navigate
-                            to="/"
-                            replace
-                        />
-                    }
-                />
+                    /* aqui se agregaran las demas rutas */
+
+                </Route>
+
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
-    );
+    )
 }
