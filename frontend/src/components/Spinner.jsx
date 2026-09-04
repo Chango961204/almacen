@@ -6,7 +6,7 @@ export default function Spinner({ size = "md" }) {
         md: "h-8 w-8",
         lg: "h-12 w-12"
     }[size];
-    
-    return <Loader2 className={`animate-spin text-blue-600${sizeClass}`} />;
+
+    return <Loader2 className={`animate-spin text-blue-600 ${sizeClass}`} />;
 }
 

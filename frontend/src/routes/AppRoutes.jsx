@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Login from "../pages/Login.jsx";
 import Home from "../pages/Home.jsx";
+import Inventario from "../pages/Inventario.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import AppLayout from "../layouts/AppLayout.jsx";
 
@@ -13,6 +14,8 @@ export default function AppRoutes() {
 
                 <Route path="/" element={<ProtectedRoute> <AppLayout /> </ProtectedRoute>} >
                     <Route index element={<Home />} />
+
+                    <Route path="inventario" element={<Inventario />} />
 
 
                 </Route>

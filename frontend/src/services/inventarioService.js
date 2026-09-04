@@ -5,7 +5,7 @@ export async function getInventarioAlmacen(){
     return response.data.data;
 }
 export async function getInventarioProyecto(proyectoId){
-    const response = await api.get(`/inventario/${proyectoId}`);
+    const response = await api.get(`/inventario/proyecto/${proyectoId}`);
     return response.data.data;
 }
 

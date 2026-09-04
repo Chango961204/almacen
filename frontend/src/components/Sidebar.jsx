@@ -5,7 +5,7 @@ const menuItems = [
     { to: "/", label: "Inicio", icon: LayoutDashboard, enabled: true, },
     { to: "/articulos", label: "Artículos", icon: Boxes, enabled: false, },
     { to: "/proyectos", label: "Proyectos", icon: FolderKanban, enabled: false, },
-    { to: "/inventario", label: "Inventario", icon: Warehouse, enabled: false, },
+    { to: "/inventario", label: "Inventario", icon: Warehouse, enabled: true, },
     { to: "/entradas", label: "Entradas", icon: PackagePlus, enabled: false, },
     { to: "/salidas", label: "Salidas", icon: PackageMinus, enabled: false, },
     { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw, enabled: false, },

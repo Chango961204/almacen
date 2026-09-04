@@ -1,7 +1,7 @@
 import Spinner from "./Spinner";
 import EmptyState from "./EmptyState";
 
-export default function Table({ colums, rows, actions, loading = false, emptyMessage }) {
+export default function Table({ columns, rows, actions, loading = false, emptyMessage }) {
     if (loading) {
         return (
             <div className="flex justify-center py-16">
@@ -19,9 +19,9 @@ export default function Table({ colums, rows, actions, loading = false, emptyMes
             <table className="min-w-full divide-y divide-slate-200 text-sm">
                 <thead className="bg-slate-50">
                     <tr>
-                        {colums.map((col) => (
+                        {columns.map((col) => (
                             <th key={col.key} className="px-4 py-3 text-left font-semibold text-slate-600">
-                                {col.label}
+                                {col.label} Medida
                             </th>
                         ))}
                         {actions && <th className="px-4 py-3 text-right font-semibold text-slate-600"></th>}
@@ -31,7 +31,7 @@ export default function Table({ colums, rows, actions, loading = false, emptyMes
                 <tbody className="divide-y divide-slate-100">
                     {rows.map((row, index) => (
                         <tr key={row.id ?? index} className="hover:bg-slate-50">
-                            {colums.map((col) => (
+                            {columns.map((col) => (
                                 <td key={col.key} className="px-4 py-3 text-slate-700">
                                     {col.render
                                         ? col.render(row)
