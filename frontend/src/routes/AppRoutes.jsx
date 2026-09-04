@@ -14,7 +14,6 @@ export default function AppRoutes() {
                 <Route path="/" element={<ProtectedRoute> <AppLayout /> </ProtectedRoute>} >
                     <Route index element={<Home />} />
 
-                    /* aqui se agregaran las demas rutas */
 
                 </Route>
 
