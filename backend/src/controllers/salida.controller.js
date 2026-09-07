@@ -12,3 +12,16 @@ export const crearSalida = async (req, res, next) => {
         next(error);
     }
 };
+
+export const obtenerTodas = async (req, res, next) => {
+    try {
+        const salidas = await salidaService.obtenerTodas();
+
+        res.json({
+            ok: true,
+            data: salidas,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

@@ -61,8 +61,8 @@ export default function Proyectos() {
             }
             setModalAbierto(false);
             cargarProyectos();
-        } catch {
-            setError("No se pudo guardar el proyecto");
+        } catch (error) {
+            setError(error.response?.data?.message || "No se pudo guardar el proyecto");
         }
     }
 

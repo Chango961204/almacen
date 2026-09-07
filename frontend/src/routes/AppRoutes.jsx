@@ -8,6 +8,7 @@ import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import AppLayout from "../layouts/AppLayout.jsx";
 import Proyectos from "../pages/Proyectos.jsx";
 import Entradas from "../pages/Entradas.jsx";
+import Salidas from "../pages/Salidas.jsx";
 
 export default function AppRoutes() {
     return (
@@ -25,6 +26,8 @@ export default function AppRoutes() {
                     <Route path="proyectos" element={<Proyectos />} />
 
                     <Route path="entradas" element={<Entradas />} />
+
+                    <Route path="salidas" element={<Salidas />} />
 
 
                 </Route>

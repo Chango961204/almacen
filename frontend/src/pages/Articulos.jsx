@@ -63,8 +63,8 @@ export default function Articulos() {
             }
             setModalAbierto(false);
             cargarArticulos();
-        } catch {
-            setError("No se pudo guardar el artículo");
+        } catch (error) {
+            setError(error.response?.data?.message || "No se pudo guardar el artículo");
         }
     }
 

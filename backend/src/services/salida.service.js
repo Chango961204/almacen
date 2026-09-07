@@ -123,3 +123,29 @@ export const crearSalida = async (data, usuarioId) => {
         });
     });
 };
+
+export const obtenerTodas = () => {
+    return prisma.salida.findMany({
+        orderBy: {
+            fecha: "desc",
+        },
+        include: {
+            proyecto: true,
+            creadoPor: {
+                select: {
+                    id: true,
+                    nombre: true
+                },
+            },
+            detalles: {
+                include: {
+                    articulo: {
+                        include: {
+                            unidadMedida: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+};
