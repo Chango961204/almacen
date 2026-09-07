@@ -30,3 +30,20 @@ export const obtenerTodas = async (req, res, next) => {
 };
 
 
+export const obtenerPorId = async (req, res, next) => {
+    try {
+        const id = Number(req.params.id);
+        const entrada = await entradaService.obtenerPorId(id);
+
+        res.json({
+            ok: true,
+            data: entrada,
+        });
+    } catch (error) {
+        next(error);
+    }
+
+};
+
+
+

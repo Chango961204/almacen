@@ -6,7 +6,7 @@ const menuItems = [
     { to: "/articulos", label: "Artículos", icon: Boxes, enabled: true, },
     { to: "/proyectos", label: "Proyectos", icon: FolderKanban, enabled: true, },
     { to: "/inventario", label: "Inventario", icon: Warehouse, enabled: true, },
-    { to: "/entradas", label: "Entradas", icon: PackagePlus, enabled: false, },
+    { to: "/entradas", label: "Entradas", icon: PackagePlus, enabled: true, },
     { to: "/salidas", label: "Salidas", icon: PackageMinus, enabled: false, },
     { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw, enabled: false, },
 ];
