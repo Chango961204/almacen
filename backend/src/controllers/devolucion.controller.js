@@ -17,3 +17,16 @@ export const crearDevolucion = async (req, res, next) => {
         next(error);
     }
 };
+
+export const obtenerTodas = async (req, res, next) => {
+    try {
+        const devoluciones = await devolucionService.obtenerTodas();
+
+        res.json({
+            ok: true,
+            data: devoluciones,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

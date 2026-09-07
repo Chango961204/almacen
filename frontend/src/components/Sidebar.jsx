@@ -8,7 +8,7 @@ const menuItems = [
     { to: "/inventario", label: "Inventario", icon: Warehouse, enabled: true, },
     { to: "/entradas", label: "Entradas", icon: PackagePlus, enabled: true, },
     { to: "/salidas", label: "Salidas", icon: PackageMinus, enabled: true, },
-    { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw, enabled: false, },
+    { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw, enabled: true, },
 ];
 
 export default function Sidebar() {

@@ -9,6 +9,7 @@ import AppLayout from "../layouts/AppLayout.jsx";
 import Proyectos from "../pages/Proyectos.jsx";
 import Entradas from "../pages/Entradas.jsx";
 import Salidas from "../pages/Salidas.jsx";
+import Devoluciones from "../pages/Devoluciones.jsx";
 
 export default function AppRoutes() {
     return (
@@ -28,6 +29,8 @@ export default function AppRoutes() {
                     <Route path="entradas" element={<Entradas />} />
 
                     <Route path="salidas" element={<Salidas />} />
+
+                    <Route path="devoluciones" element={<Devoluciones />} />
 
 
                 </Route>

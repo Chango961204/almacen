@@ -142,3 +142,37 @@ export const crearDevolucion = async (data, usuarioId) => {
         });
     });
 };
+
+export const obtenerTodas = () => {
+    return prisma.devolucion.findMany({
+        orderBy: {
+            fecha: "desc",
+        },
+        include: {
+            salida: {
+                include: {
+                    proyecto: true,
+                },
+            },
+            creadoPor: {
+                select: {
+                    id: true,
+                    nombre: true,
+                },
+            },
+            detalles: {
+                include: {
+                    salidaDetalle: {
+                        include: {
+                            articulo: {
+                                include: {
+                                    unidadMedida: true,
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
+};
