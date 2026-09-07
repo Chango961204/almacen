@@ -1,23 +1,32 @@
+import { AlertTriangle, Loader2 } from "lucide-react";
 import Modal from "./Modal";
 
 export default function ConfirmDialog({ open, onClose, onConfirm, title = "¿Confirmar acción?", message, loading = false }) {
     return (
         <Modal open={open} onClose={onClose} title={title}>
-            <p className="text-slate-600">{message}</p>
+            <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                </div>
+                <p className="pt-1 text-sm text-slate-600">{message}</p>
+            </div>
 
             <div className="mt-6 flex justify-end gap-3">
-                <button onClick={onClose} disabled={loading} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                <button onClick={onClose} disabled={loading} className="btn btn-secondary">
                     Cancelar
                 </button>
 
-                <button onClick={onConfirm} disabled={loading} className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">
-                    {loading ? "Eliminado..." : "Confirmar"}
-
+                <button onClick={onConfirm} disabled={loading} className="btn btn-danger">
+                    {loading ? (
+                        <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Eliminando...
+                        </>
+                    ) : (
+                        "Confirmar"
+                    )}
                 </button>
-
             </div>
-
         </Modal>
     );
-
 }

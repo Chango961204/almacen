@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Pencil, Trash2 } from "lucide-react";
 import { getArticulos, crearArticulo, actualizarArticulo, eliminarArticulo } from "../services/articuloService";
 import { getMarcas } from "../services/marcaService";
@@ -58,13 +59,15 @@ export default function Articulos() {
         try {
             if (articuloSeleccionado) {
                 await actualizarArticulo(articuloSeleccionado.id, datos);
+                toast.success("Artículo actualizado correctamente");
             } else {
                 await crearArticulo(datos);
+                toast.success("Artículo creado correctamente");
             }
             setModalAbierto(false);
             cargarArticulos();
         } catch (error) {
-            setError(error.response?.data?.message || "No se pudo guardar el artículo");
+            toast.error(error.response?.data?.message || "No se pudo guardar el artículo");
         }
     }
 
@@ -73,9 +76,10 @@ export default function Articulos() {
         try {
             await eliminarArticulo(confirmarBorrar.id);
             setConfirmarBorrar(null);
+            toast.success("Artículo eliminado");
             cargarArticulos();
-        } catch {
-            setError("No se pudo eliminar el artículo");
+        } catch (error) {
+            toast.error(error.response?.data?.message || "No se pudo eliminar el artículo");
         } finally {
             setBorrando(false);
         }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { getSalidas, crearSalida } from "../services/salidaService";
 import { getProyectos } from "../services/proyectoService";
 import { getArticulos } from "../services/articuloService";
@@ -44,9 +45,10 @@ export default function Salidas() {
         try {
             await crearSalida(datos);
             setModalAbierto(false);
+            toast.success("Salida registrada correctamente");
             cargarSalidas();
         } catch (error) {
-            setError(error.response?.data?.message || "No se pudo registrar la salida");
+            toast.error(error.response?.data?.message || "No se pudo registrar la salida");
         }
     }
 

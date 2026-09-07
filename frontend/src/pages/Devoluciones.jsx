@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { getDevoluciones, crearDevolucion } from "../services/devolucionService";
 import { getSalidas } from "../services/salidaService";
 import PageHeader from "../components/PageHeader";
@@ -50,10 +51,11 @@ export default function Devoluciones() {
         try {
             await crearDevolucion(datos);
             setModalAbierto(false);
+            toast.success("Devolución registrada correctamente");
             cargarDevoluciones();
             cargarSalidas(); // las cantidades disponibles cambiaron
         } catch (error) {
-            setError(error.response?.data?.message || "No se pudo registrar la devolución");
+            toast.error(error.response?.data?.message || "No se pudo registrar la devolución");
         }
     }
 

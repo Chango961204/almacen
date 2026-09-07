@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Spinner from "./Spinner";
 
 export default function ProtectedRoute({
     children,
@@ -9,9 +10,7 @@ export default function ProtectedRoute({
     if (loading) {
         return (
             <div className="flex min-h-screen items-center justify-center">
-                <p className="text-slate-500">
-                    Cargando...
-                </p>
+                <Spinner size="lg" />
             </div>
         );
     }

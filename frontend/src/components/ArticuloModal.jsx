@@ -41,16 +41,16 @@ export default function ArticuloModal({ open, onClose, onSave, articulo, marcas,
         <Modal open={open} onClose={onClose} title={articulo ? "Editar Artículo" : "Nuevo Artículo"}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <Field label="Nombre">
-                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. Tornillo de 3/4" />
+                    <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required className="input-base" placeholder="Ej. Tornillo de 3/4" />
                 </Field>
 
                 <Field label="Código">
-                    <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. ABC-123" />
+                    <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} className="input-base" placeholder="Ej. ABC-123" />
                 </Field>
 
                 <div className="grid grid-cols-2 gap-4">
                     <Field label="Marca">
-                        <select value={marcaId} onChange={(e) => setMarcaId(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" >
+                        <select value={marcaId} onChange={(e) => setMarcaId(e.target.value)} required className="input-base">
                             <option value="">Selecciona</option>
                             {marcas.map((m) => (
                                 <option key={m.id} value={m.id}>{m.nombre}</option>
@@ -59,7 +59,7 @@ export default function ArticuloModal({ open, onClose, onSave, articulo, marcas,
                     </Field>
 
                     <Field label="Unidad de Medida">
-                        <select value={unidadMedidaId} onChange={(e) => setUnidadMedidaId(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" >
+                        <select value={unidadMedidaId} onChange={(e) => setUnidadMedidaId(e.target.value)} required className="input-base">
                             <option value="">Selecciona</option>
                             {unidadesMedida.map((u) => (
                                 <option key={u.id} value={u.id}>{u.nombre} ({u.simbolo})</option>
@@ -69,14 +69,14 @@ export default function ArticuloModal({ open, onClose, onSave, articulo, marcas,
                 </div>
 
                 <Field label="Especificaciones">
-                    <textarea value={especificaciones} onChange={(e) => setEspecificaciones(e.target.value)} rows={3} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                    <textarea value={especificaciones} onChange={(e) => setEspecificaciones(e.target.value)} rows={3} className="input-base" />
                 </Field>
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={onClose} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         Cancelar
                     </button>
-                    <button type="submit" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+                    <button type="submit" className="btn btn-primary">
                         Guardar
                     </button>
                 </div>

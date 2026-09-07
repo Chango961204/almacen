@@ -63,64 +63,64 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                     <Field label="Folio Factura">
-                        <input type="text" value={folioFactura} onChange={(e) => setFolioFactura(e.target.value)} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. FAC-001" />
+                        <input type="text" value={folioFactura} onChange={(e) => setFolioFactura(e.target.value)} className="input-base" placeholder="Ej. FAC-001" />
                     </Field>
 
                     <Field label="Folio Requisición">
-                        <input type="text" value={folioRequisicion} onChange={(e) => setFolioRequisicion(e.target.value)} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. REQ-001" />
+                        <input type="text" value={folioRequisicion} onChange={(e) => setFolioRequisicion(e.target.value)} className="input-base" placeholder="Ej. REQ-001" />
                     </Field>
 
                     <Field label="Fecha de recepción">
-                        <input type="date" value={fechaRecepcion} onChange={(e) => setFechaRecepcion(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                        <input type="date" value={fechaRecepcion} onChange={(e) => setFechaRecepcion(e.target.value)} required className="input-base" />
                     </Field>
 
                     <Field label="Proveedor">
-                        <input type="text" value={proveedor} onChange={(e) => setProveedor(e.target.value)} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                        <input type="text" value={proveedor} onChange={(e) => setProveedor(e.target.value)} className="input-base" />
                     </Field>
 
                     <Field label="Distribuidor">
-                        <input type="text" value={distribuidor} onChange={(e) => setDistribuidor(e.target.value)} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                        <input type="text" value={distribuidor} onChange={(e) => setDistribuidor(e.target.value)} className="input-base" />
                     </Field>
                 </div>
 
                 <Field label="Observaciones">
-                    <textarea value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                    <textarea value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="input-base" />
                 </Field>
 
                 <div>
                     <div className="mb-2 flex items-center justify-between">
                         <p className="text-sm font-medium text-slate-700">Artículos recibidos</p>
-                        <button type="button" onClick={agregarDetalle} className="flex items-center gap-1 rounded-lg border border-blue-600 px-3 py-1.5 text-xs font-semibold text-blue-600 hover:bg-blue-50">
+                        <button type="button" onClick={agregarDetalle} className="btn btn-secondary py-1.5 text-xs">
                             <Plus className="h-3.5 w-3.5" />
                             Agregar artículo
                         </button>
                     </div>
 
                     {detalles.length === 0 ? (
-                        <p className="rounded-lg border border-dashed border-slate-300 p-4 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
                             Agrega al menos un artículo a la entrada
                         </p>
                     ) : (
-                        <div className="space-y-2">
+                        <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => (
-                                <div key={index} className="grid grid-cols-[1fr_1.5fr_0.6fr_auto] items-center gap-2 rounded-lg border border-slate-200 p-2">
-                                    <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm outline-none focus:border-blue-500">
+                                <div key={index} className="grid grid-cols-[1fr_1.5fr_0.6fr_auto] items-center gap-2 rounded-xl border border-slate-200 p-2 transition-colors duration-150 hover:border-blue-200">
+                                    <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base py-2 text-sm">
                                         <option value="">Proyecto</option>
                                         {proyectos.map((p) => (
                                             <option key={p.id} value={p.id}>{p.nombre}</option>
                                         ))}
                                     </select>
 
-                                    <select value={d.articuloId} onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)} className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm outline-none focus:border-blue-500">
+                                    <select value={d.articuloId} onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)} className="input-base py-2 text-sm">
                                         <option value="">Artículo</option>
                                         {articulos.map((a) => (
                                             <option key={a.id} value={a.id}>{a.nombre}</option>
                                         ))}
                                     </select>
 
-                                    <input type="number" value={d.cantidad} onChange={(e) => actualizarDetalle(index, "cantidad", e.target.value)} placeholder="Cant." className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm outline-none focus:border-blue-500" />
+                                    <input type="number" value={d.cantidad} onChange={(e) => actualizarDetalle(index, "cantidad", e.target.value)} placeholder="Cant." className="input-base py-2 text-sm" />
 
-                                    <button type="button" onClick={() => quitarDetalle(index)} className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600" title="Quitar">
+                                    <button type="button" onClick={() => quitarDetalle(index)} className="btn btn-ghost btn-ghost-danger" title="Quitar">
                                         <Trash2 className="h-4 w-4" />
                                     </button>
                                 </div>
@@ -130,10 +130,10 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={onClose} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         Cancelar
                     </button>
-                    <button type="submit" disabled={detalles.length === 0} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+                    <button type="submit" disabled={detalles.length === 0} className="btn btn-primary">
                         Guardar Entrada
                     </button>
                 </div>

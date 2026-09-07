@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { Pencil, Trash2 } from "lucide-react";
 import { getProyectos, crearProyecto, actualizarProyecto, eliminarProyecto } from "../services/proyectoService";
 import PageHeader from "../components/PageHeader";
@@ -56,13 +57,15 @@ export default function Proyectos() {
         try {
             if (proyectoSeleccionado) {
                 await actualizarProyecto(proyectoSeleccionado.id, datos);
+                toast.success("Proyecto actualizado correctamente");
             } else {
                 await crearProyecto(datos);
+                toast.success("Proyecto creado correctamente");
             }
             setModalAbierto(false);
             cargarProyectos();
         } catch (error) {
-            setError(error.response?.data?.message || "No se pudo guardar el proyecto");
+            toast.error(error.response?.data?.message || "No se pudo guardar el proyecto");
         }
     }
 
@@ -71,9 +74,10 @@ export default function Proyectos() {
         try {
             await eliminarProyecto(confirmarBorrar.id);
             setConfirmarBorrar(null);
+            toast.success("Proyecto eliminado");
             cargarProyectos();
-        } catch {
-            setError("No se pudo eliminar el proyecto");
+        } catch (error) {
+            toast.error(error.response?.data?.message || "No se pudo eliminar el proyecto");
         } finally {
             setBorrando(false);
         }

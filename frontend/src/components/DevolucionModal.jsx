@@ -34,6 +34,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
         } else {
             setDetalles([]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [salidaId]);
 
     function actualizarCantidad(indice, valor) {
@@ -65,11 +66,11 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                     <Field label="Folio">
-                        <input type="text" value={folio} onChange={(e) => setFolio(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. DEV-001" />
+                        <input type="text" value={folio} onChange={(e) => setFolio(e.target.value)} required className="input-base" placeholder="Ej. DEV-001" />
                     </Field>
 
                     <Field label="Salida a devolver">
-                        <select value={salidaId} onChange={(e) => setSalidaId(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500">
+                        <select value={salidaId} onChange={(e) => setSalidaId(e.target.value)} required className="input-base">
                             <option value="">Selecciona la salida</option>
                             {salidas.map((s) => (
                                 <option key={s.id} value={s.id}>
@@ -82,11 +83,11 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
 
                 <div className="grid grid-cols-2 gap-4">
                     <Field label="Fecha">
-                        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" />
+                        <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required className="input-base" />
                     </Field>
 
                     <Field label="Motivo">
-                        <input type="text" value={motivo} onChange={(e) => setMotivo(e.target.value)} required minLength={3} className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500" placeholder="Ej. Material en buen estado" />
+                        <input type="text" value={motivo} onChange={(e) => setMotivo(e.target.value)} required minLength={3} className="input-base" placeholder="Ej. Material en buen estado" />
                     </Field>
                 </div>
 
@@ -96,26 +97,26 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                     </p>
 
                     {!salidaElegida ? (
-                        <p className="rounded-lg border border-dashed border-slate-300 p-4 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
                             Primero selecciona la salida
                         </p>
                     ) : detalles.length === 0 ? (
-                        <p className="rounded-lg border border-dashed border-slate-300 p-4 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
                             Esta salida no tiene artículos
                         </p>
                     ) : (
-                        <div className="space-y-2">
+                        <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => {
                                 const salidaDetalle = salidaElegida.detalles[index];
 
                                 return (
-                                    <div key={d.salidaDetalleId} className="grid grid-cols-[1.5fr_0.6fr_0.7fr] items-center gap-2 rounded-lg border border-slate-200 p-2">
-                                        <div className="text-sm text-slate-700">
+                                    <div key={d.salidaDetalleId} className="grid grid-cols-[1.5fr_0.6fr_0.7fr] items-center gap-2 rounded-xl border border-slate-200 p-2 transition-colors duration-150 hover:border-blue-200">
+                                        <div className="px-1 text-sm font-medium text-slate-700">
                                             {salidaDetalle?.articulo?.nombre || "Artículo"}
                                         </div>
 
                                         <div className="text-sm text-slate-500">
-                                            Salieron: {Number(salidaDetalle?.cantidad)}{" "}
+                                            {Number(salidaDetalle?.cantidad)}{" "}
                                             {salidaDetalle?.articulo?.unidadMedida?.simbolo || ""}
                                         </div>
 
@@ -124,7 +125,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                                             value={d.cantidad}
                                             onChange={(e) => actualizarCantidad(index, e.target.value)}
                                             placeholder="Devolver"
-                                            className="w-full rounded-lg border border-slate-300 px-2 py-2 text-sm outline-none focus:border-blue-500"
+                                            className="input-base py-2 text-sm"
                                         />
                                     </div>
                                 );
@@ -134,10 +135,10 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={onClose} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         Cancelar
                     </button>
-                    <button type="submit" disabled={detalles.filter((d) => d.cantidad).length === 0} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50">
+                    <button type="submit" disabled={detalles.filter((d) => d.cantidad).length === 0} className="btn btn-primary">
                         Guardar Devolución
                     </button>
                 </div>

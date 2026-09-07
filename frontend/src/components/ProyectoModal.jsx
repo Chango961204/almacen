@@ -47,7 +47,7 @@ export default function ProyectoModal({ open, onClose, onSave, proyecto }) {
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         required
-                        className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
+                        className="input-base"
                         placeholder="Ej. Construcción Torre Norte"
                     />
                 </Field>
@@ -57,7 +57,7 @@ export default function ProyectoModal({ open, onClose, onSave, proyecto }) {
                         value={descripcion}
                         onChange={(e) => setDescripcion(e.target.value)}
                         rows={3}
-                        className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
+                        className="input-base"
                     />
                 </Field>
 
@@ -67,7 +67,7 @@ export default function ProyectoModal({ open, onClose, onSave, proyecto }) {
                             type="date"
                             value={fechaInicio}
                             onChange={(e) => setFechaInicio(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
+                            className="input-base"
                         />
                     </Field>
 
@@ -76,16 +76,16 @@ export default function ProyectoModal({ open, onClose, onSave, proyecto }) {
                             type="date"
                             value={fechaFin}
                             onChange={(e) => setFechaFin(e.target.value)}
-                            className="w-full rounded-lg border border-slate-300 px-4 py-2 outline-none focus:border-blue-500"
+                            className="input-base"
                         />
                     </Field>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={onClose} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                    <button type="button" onClick={onClose} className="btn btn-secondary">
                         Cancelar
                     </button>
-                    <button type="submit" className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">
+                    <button type="submit" className="btn btn-primary">
                         Guardar
                     </button>
                 </div>

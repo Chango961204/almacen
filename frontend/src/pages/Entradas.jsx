@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { getEntradas, crearEntrada } from "../services/entradaService";
 import { getProyectos } from "../services/proyectoService";
 import { getArticulos } from "../services/articuloService";
@@ -43,9 +44,10 @@ export default function Entradas() {
         try {
             await crearEntrada(datos);
             setModalAbierto(false);
+            toast.success("Entrada registrada correctamente");
             cargarEntradas();
         } catch (error) {
-            setError(error.response?.data?.message || "No se pudo registrar la entrada");
+            toast.error(error.response?.data?.message || "No se pudo registrar la entrada");
         }
     }
 
