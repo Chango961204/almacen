@@ -4,7 +4,7 @@ import { Boxes, FolderKanban, LayoutDashboard, PackageMinus, PackagePlus, Rotate
 const menuItems = [
     { to: "/", label: "Inicio", icon: LayoutDashboard, enabled: true, },
     { to: "/articulos", label: "Artículos", icon: Boxes, enabled: true, },
-    { to: "/proyectos", label: "Proyectos", icon: FolderKanban, enabled: false, },
+    { to: "/proyectos", label: "Proyectos", icon: FolderKanban, enabled: true, },
     { to: "/inventario", label: "Inventario", icon: Warehouse, enabled: true, },
     { to: "/entradas", label: "Entradas", icon: PackagePlus, enabled: false, },
     { to: "/salidas", label: "Salidas", icon: PackageMinus, enabled: false, },

@@ -6,6 +6,7 @@ import Inventario from "../pages/Inventario.jsx";
 import Articulos from "../pages/Articulos.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import AppLayout from "../layouts/AppLayout.jsx";
+import Proyectos from "../pages/Proyectos.jsx";
 
 export default function AppRoutes() {
     return (
@@ -18,7 +19,9 @@ export default function AppRoutes() {
 
                     <Route path="inventario" element={<Inventario />} />
 
-                     <Route path="articulos" element={<Articulos />} />
+                    <Route path="articulos" element={<Articulos />} />
+
+                    <Route path="proyectos" element={<Proyectos />} />
 
 
                 </Route>
