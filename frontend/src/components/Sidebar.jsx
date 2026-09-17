@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { Boxes, FolderKanban, LayoutDashboard, PackageMinus, PackagePlus, RotateCcw, Warehouse } from "lucide-react";
+import { Boxes, FolderKanban, LayoutDashboard, PackageMinus, PackagePlus, RotateCcw, Warehouse, History, Users } from "lucide-react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const menuItems = [
     { to: "/", label: "Inicio", icon: LayoutDashboard },
@@ -9,9 +10,16 @@ const menuItems = [
     { to: "/entradas", label: "Entradas", icon: PackagePlus },
     { to: "/salidas", label: "Salidas", icon: PackageMinus },
     { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw },
+    { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/auditorias", label: "Auditorias", icon: History, roles: ["SUPER_ADMIN"] },
 ];
 
 export default function Sidebar() {
+    const { usuario } = useAuth();
+
+    const itemsVisibles = menuItems.filter(
+        (item) => !item.roles || item.roles.includes(usuario?.rol)
+    )
     return (
         <aside className="flex h-full w-64 flex-col border-r border-slate-200 bg-white">
             <div className="flex h-16 items-center gap-3 border-b border-slate-100 px-5">

@@ -31,4 +31,16 @@ export const usuarioRepository = {
             },
         });
     },
+
+    findAll() {
+        return prisma.usuario.findMany({
+            orderBy: {
+                id: "asc",
+            },
+            include: {
+                rol: true,
+            },
+        });
+    },
 };
+

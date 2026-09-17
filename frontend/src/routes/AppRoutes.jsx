@@ -10,6 +10,9 @@ import Proyectos from "../pages/Proyectos.jsx";
 import Entradas from "../pages/Entradas.jsx";
 import Salidas from "../pages/Salidas.jsx";
 import Devoluciones from "../pages/Devoluciones.jsx";
+import Auditorias from "../pages/Auditorias.jsx";
+import Usuarios from "../pages/Usuarios.jsx";
+import RoleRoute from "../components/RoleRoute.jsx";
 
 export default function AppRoutes() {
     return (
@@ -32,7 +35,10 @@ export default function AppRoutes() {
 
                     <Route path="devoluciones" element={<Devoluciones />} />
 
+                    <Route path="usuarios" element={<RoleRoute roles={["SUPER_ADMIN", "ADMIN"]}><Usuarios /></RoleRoute>} />
 
+                    <Route path="auditorias" element={<RoleRoute roles={["SUPER_ADMIN"]}><Auditorias /></RoleRoute>} />
+                    
                 </Route>
 
                 <Route path="*" element={<Navigate to="/" replace />} />
