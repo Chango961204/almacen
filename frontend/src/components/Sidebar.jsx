@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { Boxes, FolderKanban, LayoutDashboard, PackageMinus, PackagePlus, RotateCcw, Warehouse, History, Users } from "lucide-react";
-import { useAuth } from "../context/AuthContext.jsx";
+import { Boxes, FolderKanban, History, LayoutDashboard, PackageMinus, PackagePlus, RotateCcw, Users, Warehouse } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const menuItems = [
     { to: "/", label: "Inicio", icon: LayoutDashboard },
@@ -11,20 +11,20 @@ const menuItems = [
     { to: "/salidas", label: "Salidas", icon: PackageMinus },
     { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw },
     { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN", "ADMIN"] },
-    { to: "/auditorias", label: "Auditorias", icon: History, roles: ["SUPER_ADMIN"] },
+    { to: "/auditorias", label: "Auditorías", icon: History, roles: ["SUPER_ADMIN"] },
 ];
 
 export default function Sidebar() {
     const { usuario } = useAuth();
-
     const itemsVisibles = menuItems.filter(
         (item) => !item.roles || item.roles.includes(usuario?.rol)
-    )
+    );
+
     return (
-        <aside className="flex h-full w-64 flex-col border-r border-slate-200 bg-white">
-            <div className="flex h-16 items-center gap-3 border-b border-slate-100 px-5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-red from-blue-600 to-indigo-600 shadow-md shadow-blue-600/30">
-                    <Warehouse className="h-5 w-5 text-white" />
+        <aside className="flex h-full w-64 shrink-0 flex-col border-r border-white/60 bg-white/40 backdrop-blur-2xl">
+            <div className="flex h-16 items-center gap-3 border-b border-white/50 px-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/40">
+                    <Warehouse className="h-5 w-5" />
                 </div>
                 <div>
                     <p className="text-base font-bold leading-tight text-slate-900">Inventario</p>
@@ -33,7 +33,7 @@ export default function Sidebar() {
             </div>
 
             <nav className="flex-1 space-y-1 overflow-y-auto p-4">
-                {menuItems.map((item) => {
+                {itemsVisibles.map((item) => {
                     const Icon = item.icon;
                     const isHome = item.to === "/";
 
@@ -43,16 +43,16 @@ export default function Sidebar() {
                             to={item.to}
                             end={isHome}
                             className={({ isActive }) =>
-                                `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${isActive
-                                    ? "bg-gradient-to-red from-blue-50 to-indigo-50 text-blue-700"
-                                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                                `group relative flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${isActive
+                                    ? "bg-linear-to-r from-blue-500/15 to-indigo-500/15 text-blue-700 shadow-[inset_0_1px_0_rgb(255_255_255/0.6)]"
+                                    : "text-slate-500 hover:bg-white/50 hover:text-slate-900"
                                 }`
                             }
                         >
                             {({ isActive }) => (
                                 <>
                                     {isActive && (
-                                        <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-black from-blue-600 to-indigo-600" />
+                                        <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-linear-to-b from-blue-500 to-indigo-600 shadow-[0_0_12px_rgb(99_102_241/0.8)]" />
                                     )}
                                     <Icon className={`h-5 w-5 transition-transform duration-200 ${isActive ? "" : "group-hover:scale-110"}`} />
                                     {item.label}
@@ -63,7 +63,7 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            <div className="border-t border-slate-100 p-4">
+            <div className="border-t border-white/50 p-4">
                 <p className="px-2 text-xs font-medium uppercase tracking-wide text-slate-400">
                     Almacén Central
                 </p>

@@ -76,7 +76,7 @@ export default function Auditorias() {
         <div className="animate-fade-in">
             <PageHeader title="Auditorías" subtitle="Registro detallado de las acciones del sistema" />
 
-            <form onSubmit={aplicarFiltros} className="mb-4 grid grid-cols-1 gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-5">
+            <form onSubmit={aplicarFiltros} className="glass mb-4 grid grid-cols-1 gap-3 rounded-3xl p-5 sm:grid-cols-2 lg:grid-cols-5">
                 <div>
                     <label className="mb-1 block text-xs font-semibold text-slate-600">Entidad</label>
                     <select value={filtros.entidad} onChange={(e) => setFiltros({ ...filtros, entidad: e.target.value })} className="input-base py-2">
@@ -113,7 +113,7 @@ export default function Auditorias() {
                 </div>
             </form>
 
-            {error && <div className="animate-slide-down mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700 ring-1 ring-red-100">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}

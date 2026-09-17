@@ -68,13 +68,13 @@ export default function Inventario() {
     return (
         <div className="animate-fade-in">
             <PageHeader title="Inventario" subtitle="Consulta las existencias del almacén y por proyecto" />
-            <div className="mb-6 inline-flex rounded-xl bg-slate-100 p-1">
-                <button onClick={() => setVista("almacen")} className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 ${vista === "almacen" ? "bg-white text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}>
+            <div className="mb-6 inline-flex rounded-full border border-white/60 bg-white/40 p-1.5 backdrop-blur-xl">
+                <button onClick={() => setVista("almacen")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "almacen" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
                     <Warehouse className="h-4 w-4" />
                     Almacén
                 </button>
 
-                <button onClick={() => setVista("proyecto")} className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 ${vista === "proyecto" ? "bg-white text-blue-700 shadow-sm" : "text-slate-600 hover:text-slate-900"}`}>
+                <button onClick={() => setVista("proyecto")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "proyecto" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
                     <FolderKanban className="h-4 w-4" />
                     Por Proyecto
                 </button>
@@ -93,7 +93,7 @@ export default function Inventario() {
                 </div>
             )}
 
-            {error && <div className="animate-slide-down mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700 ring-1 ring-red-100">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}

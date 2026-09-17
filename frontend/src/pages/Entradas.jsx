@@ -67,7 +67,7 @@ export default function Entradas() {
         <div>
             <PageHeader title="Entradas" subtitle="Registra y consulta entradas al almacén" onAdd={() => setModalAbierto(true)} addLabel="Nueva Entrada" />
 
-            {error && <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}

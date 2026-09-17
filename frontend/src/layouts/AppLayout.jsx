@@ -17,18 +17,18 @@ export default function AppLayout() {
     const { usuario, logout } = useAuth();
 
     return (
-        <div className="flex h-screen bg-slate-100">
+        <div className="flex h-screen overflow-hidden">
             <Sidebar />
 
             <div className="flex flex-1 flex-col overflow-hidden">
-                <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white/80 px-6 backdrop-blur">
+                <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/60 bg-white/40 px-6 backdrop-blur-2xl">
                     <p className="text-sm font-medium text-slate-500">
                         Panel de Control
                     </p>
 
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-bold text-white shadow-sm shadow-blue-600/30">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-sm font-bold text-white shadow-md shadow-indigo-500/30 ring-1 ring-white/40">
                                 {iniciales(usuario?.nombre)}
                             </div>
                             <div className="text-right">
@@ -41,11 +41,11 @@ export default function AppLayout() {
                             </div>
                         </div>
 
-                        <div className="h-8 w-px bg-slate-200" />
+                        <div className="h-8 w-px bg-white/70" />
 
                         <button
                             onClick={logout}
-                            className="group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600"
+                            className="group flex items-center gap-2 rounded-full bg-white/40 px-3 py-2 text-sm font-medium text-slate-600 shadow-[inset_0_1px_0_rgb(255_255_255/0.8)] backdrop-blur-xl transition-all duration-200 hover:bg-rose-500/10 hover:text-rose-600"
                             title="Cerrar sesión"
                         >
                             <LogOut className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />

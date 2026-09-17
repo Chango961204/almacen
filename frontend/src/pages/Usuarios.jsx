@@ -65,7 +65,7 @@ export default function Usuarios() {
         <div className="animate-fade-in">
             <PageHeader title="Usuarios" subtitle="Registra y consulta los usuarios del sistema" onAdd={() => setModalAbierto(true)} addLabel="Nuevo Usuario" />
 
-            {error && <div className="animate-slide-down mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700 ring-1 ring-red-100">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}

@@ -10,18 +10,22 @@ function App() {
         position="top-right"
         toastOptions={{
           style: {
-            borderRadius: "12px",
-            background: "#0f172a",
-            color: "#fff",
+            borderRadius: "9999px",
+            background: "rgba(255,255,255,0.85)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            color: "#0f172a",
             fontSize: "14px",
             fontWeight: 500,
-            boxShadow: "0 8px 24px rgb(15 23 42 / 0.2)",
+            border: "1px solid rgba(255,255,255,0.7)",
+            boxShadow: "0 12px 32px rgba(15,23,42,0.14), inset 0 1px 0 rgba(255,255,255,0.8)",
+            padding: "10px 18px",
           },
           success: {
-            iconTheme: { primary: "#16a34a", secondary: "#fff" },
+            iconTheme: { primary: "#10b981", secondary: "#fff" },
           },
           error: {
-            iconTheme: { primary: "#dc2626", secondary: "#fff" },
+            iconTheme: { primary: "#f43f5e", secondary: "#fff" },
           },
           duration: 3500,
         }}

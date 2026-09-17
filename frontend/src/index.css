@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+:root {
+    --glass-bg: rgb(255 255 255 / 0.5);
+    --glass-bg-strong: rgb(255 255 255 / 0.74);
+    --glass-border: rgb(255 255 255 / 0.6);
+    --glass-highlight:
+        inset 0 1px 0 rgb(255 255 255 / 0.85),
+        inset 0 -1px 0 rgb(255 255 255 / 0.2);
+    --glass-shadow:
+        0 10px 40px rgb(15 23 42 / 0.08),
+        0 2px 10px rgb(15 23 42 / 0.05);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -13,112 +25,117 @@ body,
 body {
     margin: 0;
     font-family:
-        Inter,
-        system-ui,
         -apple-system,
         BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        Inter,
         "Segoe UI",
+        system-ui,
+        Roboto,
         sans-serif;
-    background: #f8fafc;
+    color: #0f172a;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background:
+        radial-gradient(1000px 640px at 88% -8%, rgb(125 211 252 / 0.5), transparent 60%),
+        radial-gradient(900px 620px at -8% 18%, rgb(196 181 253 / 0.55), transparent 55%),
+        radial-gradient(820px 560px at 55% 115%, rgb(253 186 116 / 0.45), transparent 60%),
+        linear-gradient(140deg, #eff6ff 0%, #f5f3ff 52%, #fdf2f8 100%);
+    background-attachment: fixed;
 }
 
 /* ======================================================
-   ANIMACIONES
+   SUPERFICIES DE CRISTAL (Liquid Glass)
+   ====================================================== */
+.glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow), var(--glass-highlight);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+}
+
+.glass-strong {
+    background: var(--glass-bg-strong);
+}
+
+/* ======================================================
+   ANIMACIONES (con resorte suave estilo iOS)
    ====================================================== */
 @keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes scale-in {
-    from {
-        opacity: 0;
-        transform: scale(0.95) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes slide-up {
-    from {
-        opacity: 0;
-        transform: translateY(14px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slide-down {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-6px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -50px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.95); }
 }
 
 .animate-fade-in {
-    animation: fade-in 0.2s ease-out;
+    animation: fade-in 0.25s ease-out both;
 }
 
 .animate-scale-in {
-    animation: scale-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .animate-slide-up {
-    animation: slide-up 0.35s ease-out both;
+    animation: slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-slide-down {
-    animation: slide-down 0.25s ease-out both;
+    animation: slide-down 0.3s ease-out both;
 }
 
 .animate-float {
     animation: float 6s ease-in-out infinite;
 }
 
+.animate-blob {
+    animation: blob 14s ease-in-out infinite;
+}
+
 /* ======================================================
-   BOTONES  (.btn / .btn-primary / .btn-secondary / ...)
+   BOTONES (píldoras estilo iOS)
    ====================================================== */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border-radius: 0.75rem;
-    padding: 0.5rem 1.1rem;
+    border-radius: 9999px;
+    padding: 0.55rem 1.3rem;
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 1.25rem;
+    border: 1px solid transparent;
     outline: none;
     cursor: pointer;
-    border: none;
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.15s ease;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn:active {
@@ -131,58 +148,97 @@ body {
     transform: none;
 }
 
+.btn:focus-visible {
+    outline: 2px solid rgb(99 102 241 / 0.5);
+    outline-offset: 2px;
+}
+
 .btn-primary {
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #3b82f6, #6d28d9);
     color: #fff;
-    box-shadow: 0 1px 2px rgb(37 99 235 / 0.3);
+    border-color: rgb(255 255 255 / 0.2);
+    box-shadow:
+        0 4px 16px rgb(79 70 229 / 0.35),
+        inset 0 1px 0 rgb(255 255 255 / 0.25);
 }
 
 .btn-primary:hover {
-    background-color: #1d4ed8;
-    box-shadow: 0 6px 16px rgb(37 99 235 / 0.35);
+    box-shadow:
+        0 8px 28px rgb(79 70 229 / 0.45),
+        inset 0 1px 0 rgb(255 255 255 / 0.25);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
-    background-color: #fff;
+    background: var(--glass-bg);
     color: #334155;
-    border: 1px solid #cbd5e1;
+    border-color: var(--glass-border);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: var(--glass-highlight);
 }
 
 .btn-secondary:hover {
-    background-color: #f8fafc;
-    border-color: #94a3b8;
+    background: rgb(255 255 255 / 0.75);
+    border-color: rgb(255 255 255 / 0.9);
 }
 
 .btn-danger {
-    background-color: #dc2626;
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
     color: #fff;
+    border-color: rgb(255 255 255 / 0.2);
+    box-shadow:
+        0 4px 16px rgb(244 63 94 / 0.35),
+        inset 0 1px 0 rgb(255 255 255 / 0.25);
 }
 
 .btn-danger:hover {
-    background-color: #b91c1c;
-    box-shadow: 0 6px 16px rgb(220 38 38 / 0.3);
-}
-
-.btn-danger:disabled {
-    background-color: #dc2626;
+    box-shadow:
+        0 8px 28px rgb(244 63 94 / 0.45),
+        inset 0 1px 0 rgb(255 255 255 / 0.25);
+    transform: translateY(-1px);
 }
 
 .btn-ghost {
     width: 2rem;
     height: 2rem;
     padding: 0;
-    background-color: transparent;
+    border-radius: 9999px;
+    background-color: rgb(255 255 255 / 0.4);
     color: #64748b;
+    backdrop-filter: blur(12px);
 }
 
 .btn-ghost:hover {
-    background-color: #f1f5f9;
+    background-color: rgb(255 255 255 / 0.75);
     color: #334155;
 }
 
 .btn-ghost-danger:hover {
-    background-color: #fef2f2;
-    color: #dc2626;
+    background-color: rgb(244 63 94 / 0.12);
+    color: #e11d48;
+}
+
+/* Botones de ícono dentro de las tablas */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.75rem;
+    color: #64748b;
+    background: rgb(255 255 255 / 0.4);
+    transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+    background: rgb(59 130 246 / 0.12);
+    color: #2563eb;
+}
+
+.btn-icon.btn-icon-danger:hover {
+    background: rgb(244 63 94 / 0.12);
+    color: #e11d48;
 }
 
 /* ======================================================
@@ -190,16 +246,16 @@ body {
    ====================================================== */
 .input-base {
     width: 100%;
-    border-radius: 0.75rem;
-    border: 1px solid #cbd5e1;
-    background-color: #fff;
-    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid rgb(255 255 255 / 0.7);
+    background: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(16px) saturate(160%);
+    padding: 0.65rem 1rem;
     font-size: 0.875rem;
     color: #0f172a;
     outline: none;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    box-shadow: var(--glass-highlight);
+    transition: all 0.2s ease;
 }
 
 .input-base::placeholder {
@@ -207,13 +263,47 @@ body {
 }
 
 .input-base:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgb(37 99 235 / 0.12);
+    border-color: rgb(99 102 241 / 0.6);
+    background: rgb(255 255 255 / 0.85);
+    box-shadow:
+        0 0 0 3px rgb(99 102 241 / 0.18),
+        var(--glass-highlight);
 }
 
 .input-base:disabled {
-    background-color: #f1f5f9;
+    opacity: 0.6;
     cursor: not-allowed;
+}
+
+select.input-base {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
+}
+
+input[type="date"].input-base {
+    padding-right: 1rem;
+}
+
+/* ======================================================
+   ALERTAS
+   ====================================================== */
+.alert-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgb(254 226 226 / 0.75);
+    background: rgb(254 242 242 / 0.75);
+    backdrop-filter: blur(8px);
+    padding: 0.625rem 0.9rem;
+    font-size: 0.875rem;
+    border-radius: 1rem;
+    color: #b91c1c;
+    animation: slide-down 0.3s ease-out both;
 }
 
 /* ======================================================
@@ -229,10 +319,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #cbd5e1;
+    background-color: rgb(148 163 184 / 0.45);
     border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #94a3b8;
+    background-color: rgb(148 163 184 / 0.7);
 }

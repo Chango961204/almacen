@@ -97,11 +97,11 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                     </p>
 
                     {!salidaElegida ? (
-                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-white/70 bg-white/30 p-6 text-center text-sm text-slate-400 backdrop-blur">
                             Primero selecciona la salida
                         </p>
                     ) : detalles.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-white/70 bg-white/30 p-6 text-center text-sm text-slate-400 backdrop-blur">
                             Esta salida no tiene artículos
                         </p>
                     ) : (
@@ -110,7 +110,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                                 const salidaDetalle = salidaElegida.detalles[index];
 
                                 return (
-                                    <div key={d.salidaDetalleId} className="grid grid-cols-[1.5fr_0.6fr_0.7fr] items-center gap-2 rounded-xl border border-slate-200 p-2 transition-colors duration-150 hover:border-blue-200">
+                                    <div key={d.salidaDetalleId} className="grid grid-cols-[1.5fr_0.6fr_0.7fr] items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300">
                                         <div className="px-1 text-sm font-medium text-slate-700">
                                             {salidaDetalle?.articulo?.nombre || "Artículo"}
                                         </div>

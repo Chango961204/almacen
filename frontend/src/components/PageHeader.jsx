@@ -4,7 +4,7 @@ export default function PageHeader({ title, subtitle, onAdd, addLabel }) {
     return (
         <div className="mb-6 flex animate-slide-down items-center justify-between">
             <div>
-                <h1 className="text-2xl font-bold text-slate-900">{title}</h1>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900">{title}</h1>
                 {subtitle && <p className="mt-1 text-sm text-slate-500">{subtitle}</p>}
             </div>
             {onAdd && (

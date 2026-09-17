@@ -99,7 +99,7 @@ export default function Proyectos() {
         <div>
             <PageHeader title="Proyectos" subtitle="Gestiona los proyectos" onAdd={abrirCrear} addLabel="Nuevo Proyecto" />
 
-            {error && <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}
@@ -108,10 +108,10 @@ export default function Proyectos() {
                 emptyMessage="No hay proyectos registrados"
                 actions={(fila) => (
                     <>
-                        <button onClick={() => abrirEditar(fila)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-blue-600" title="Editar">
+                        <button onClick={() => abrirEditar(fila)} className="btn-icon" title="Editar">
                             <Pencil className="h-4 w-4" />
                         </button>
-                        <button onClick={() => setConfirmarBorrar(fila)} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-red-600" title="Eliminar">
+                        <button onClick={() => setConfirmarBorrar(fila)} className="btn-icon btn-icon-danger" title="Eliminar">
                             <Trash2 className="h-4 w-4" />
                         </button>
                     </>

@@ -97,13 +97,13 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                     </div>
 
                     {detalles.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-slate-300 p-6 text-center text-sm text-slate-400">
+                        <p className="rounded-xl border border-dashed border-white/70 bg-white/30 p-6 text-center text-sm text-slate-400 backdrop-blur">
                             Agrega al menos un artículo a la entrada
                         </p>
                     ) : (
                         <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => (
-                                <div key={index} className="grid grid-cols-[1fr_1.5fr_0.6fr_auto] items-center gap-2 rounded-xl border border-slate-200 p-2 transition-colors duration-150 hover:border-blue-200">
+                                <div key={index} className="grid grid-cols-[1fr_1.5fr_0.6fr_auto] items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300">
                                     <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base py-2 text-sm">
                                         <option value="">Proyecto</option>
                                         {proyectos.map((p) => (

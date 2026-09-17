@@ -74,7 +74,7 @@ export default function Devoluciones() {
         <div>
             <PageHeader title="Devoluciones" subtitle="Registra devoluciones de material de salidas" onAdd={() => setModalAbierto(true)} addLabel="Nueva Devolución" />
 
-            {error && <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+            {error && <div className="alert-error">{error}</div>}
 
             <Table
                 columns={columns}

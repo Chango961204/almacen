@@ -1,10 +1,10 @@
 export default function Badge({ tone = "gray", children }) {
     const tones = {
-        green: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-        red: "bg-red-50 text-red-700 ring-red-600/20",
-        blue: "bg-blue-50 text-blue-700 ring-blue-600/20",
-        gray: "bg-slate-100 text-slate-700 ring-slate-500/20",
-        yellow: "bg-amber-50 text-amber-700 ring-amber-600/20",
+        green: "bg-emerald-500/10 text-emerald-700 ring-emerald-600/25 backdrop-blur",
+        red: "bg-rose-500/10 text-rose-700 ring-rose-600/25 backdrop-blur",
+        blue: "bg-blue-500/10 text-blue-700 ring-blue-600/25 backdrop-blur",
+        gray: "bg-slate-500/10 text-slate-600 ring-slate-500/25 backdrop-blur",
+        yellow: "bg-amber-500/10 text-amber-700 ring-amber-600/25 backdrop-blur",
     };
 
     return (

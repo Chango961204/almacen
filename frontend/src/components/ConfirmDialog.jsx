@@ -5,7 +5,7 @@ export default function ConfirmDialog({ open, onClose, onConfirm, title = "¿Con
     return (
         <Modal open={open} onClose={onClose} title={title}>
             <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-500/10">
                     <AlertTriangle className="h-5 w-5 text-red-600" />
                 </div>
                 <p className="pt-1 text-sm text-slate-600">{message}</p>
