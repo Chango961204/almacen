@@ -2,7 +2,7 @@ import * as unidadMedidaService from "../services/unidadMedida.service.js";
 
 export const crear = async (req, res, next) => {
     try {
-        const unidadMedida = await unidadMedidaService.crear(req.body);
+        const unidadMedida = await unidadMedidaService.crear(req.body, req.user.id);
 
         res.status(201).json({
             ok: true,
@@ -45,10 +45,7 @@ export const obtenerPorId = async (req, res, next) => {
 export const actualizar = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-        const unidadMedida = await unidadMedidaService.actualizar(
-            id,
-            req.body
-        );
+        const unidadMedida = await unidadMedidaService.actualizar(id, req.body, req.user.id);
         res.json({
             ok: true,
             message: "Unidad de medida actualizada",

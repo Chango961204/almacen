@@ -2,7 +2,7 @@ import * as marcaService from "../services/marca.service.js";
 
 export const crear = async (req, res, next) => {
     try {
-        const marca = await marcaService.crear(req.body);
+        const marca = await marcaService.crear(req.body, req.user.id);
 
         res.status(201).json({
             ok: true,
@@ -46,10 +46,7 @@ export const obtenerPorId = async (req, res, next) => {
 export const actualizar = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-        const marca = await marcaService.actualizar(
-            id,
-            req.body
-        );
+        const marca = await marcaService.actualizar(id, req.body, req.user.id);
         res.json({
             ok: true,
             message: "Marca Actualizada",

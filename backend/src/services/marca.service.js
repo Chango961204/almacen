@@ -1,6 +1,7 @@
 import * as marcaRepository from "../repositories/marca.repository.js";
+import { registrar } from "./auditoria.service.js";
 
-export const crear = async (data) => {
+export const crear = async (data, usuarioId) => {
     const marcas = await marcaRepository.obtenerTodas();
 
     const existe = marcas.some(
@@ -14,9 +15,19 @@ export const crear = async (data) => {
         throw error;
     }
 
-    return marcaRepository.crear({
+    const marca = await marcaRepository.crear({
         nombre: data.nombre,
     });
+
+    await registrar({
+        usuarioId,
+        accion: "CREAR",
+        entidad: "MARCA",
+        entidadId: marca.id,
+        descripcion: `Marca ${marca.nombre} registrada`,
+    });
+
+    return marca;
 };
 
 export const obtenerTodas = () => {
@@ -34,10 +45,20 @@ export const obtenerPorId = async (id) => {
     return marca;
 };
 
-export const actualizar = async (id, data) => {
+export const actualizar = async (id, data, usuarioId) => {
     await obtenerPorId(id);
 
-    return marcaRepository.actualizar(id, {
+    const marca = await marcaRepository.actualizar(id, {
         nombre: data.nombre,
     });
+
+    await registrar({
+        usuarioId,
+        accion: "ACTUALIZAR",
+        entidad: "MARCA",
+        entidadId: marca.id,
+        descripcion: `Marca ${marca.nombre} actualizada`,
+    });
+
+    return marca;
 };

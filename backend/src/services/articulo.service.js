@@ -1,15 +1,13 @@
 import * as articuloRepository from "../repositories/articulo.repository.js";
 import prisma from "../lib/prisma.js";
+import { registrar } from "./auditoria.service.js";
 
-
-export const crearArticulo = async (data) => {
+export const crearArticulo = async (data, usuarioId) => {
     const proyectoExistente =
         await articuloRepository.obtenerArticulos();
 
     const marca = await prisma.marca.findUnique({
-        where: {
-            id: data.marcaId
-        },
+        where: { id: data.marcaId },
     });
 
     if (!marca || !marca.activo) {
@@ -19,9 +17,7 @@ export const crearArticulo = async (data) => {
     }
 
     const unidad = await prisma.unidadMedida.findUnique({
-        where: {
-            id: data.unidadMedidaId
-        },
+        where: { id: data.unidadMedidaId },
     });
 
     if (!unidad || !unidad.activo) {
@@ -30,13 +26,24 @@ export const crearArticulo = async (data) => {
         throw error;
     }
 
-    return articuloRepository.crearArticulo({
+    const articulo = await articuloRepository.crearArticulo({
         codigo: data.codigo || null,
         nombre: data.nombre,
         especificaciones: data.especificaciones || null,
         marcaId: data.marcaId,
         unidadMedidaId: data.unidadMedidaId,
     });
+
+    await registrar({
+        usuarioId,
+        accion: "CREAR",
+        entidad: "ARTICULO",
+        entidadId: articulo.id,
+        descripcion: `Artículo ${articulo.nombre} creado`,
+        datos: data,
+    });
+
+    return articulo;
 };
 
 export const listarArticulos = () => {
@@ -54,14 +61,35 @@ export const obtenerArticulo = async (id) => {
     return articulo;
 };
 
-export const actualizarArticulo = async (id, data) => {
+export const actualizarArticulo = async (id, data, usuarioId) => {
     await obtenerArticulo(id);
 
-    return articuloRepository.actualizarArticulo(id, data);
+    const articulo = await articuloRepository.actualizarArticulo(id, data);
+
+    await registrar({
+        usuarioId,
+        accion: "ACTUALIZAR",
+        entidad: "ARTICULO",
+        entidadId: articulo.id,
+        descripcion: `Artículo ${articulo.nombre} actualizado`,
+        datos: data,
+    });
+
+    return articulo;
 };
 
-export const eliminarArticulo = async (id) => {
+export const eliminarArticulo = async (id, usuarioId) => {
     await obtenerArticulo(id);
 
-    return articuloRepository.eliminarArticulo(id);
+    const articulo = await articuloRepository.eliminarArticulo(id);
+
+    await registrar({
+        usuarioId,
+        accion: "ELIMINAR",
+        entidad: "ARTICULO",
+        entidadId: articulo.id,
+        descripcion: `Artículo ${articulo.nombre} marcado como inactivo`,
+    });
+
+    return articulo;
 };

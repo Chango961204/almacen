@@ -2,7 +2,7 @@ import * as articuloService from "../services/articulo.service.js";
 
 export const crearArticulo = async (req, res, next) => {
     try {
-        const articulo = await articuloService.crearArticulo(req.body);
+        const articulo = await articuloService.crearArticulo(req.body, req.user.id);
 
         res.status(201).json({
             ok: true,
@@ -42,7 +42,7 @@ export const obtenerArticulo = async (req, res, next) => {
 export const actualizarArticulo = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-        const articulo = await articuloService.actualizarArticulo(id, req.body);
+        const articulo = await articuloService.actualizarArticulo(id, req.body, req.user.id);
         res.json({
             ok: true,
             message: "Articulo actualizado correctamente",
@@ -56,7 +56,7 @@ export const actualizarArticulo = async (req, res, next) => {
 export const eliminarArticulo = async (req, res, next) => {
     try {
         const id = Number(req.params.id);
-        const articulo = await articuloService.eliminarArticulo(id);
+        const articulo = await articuloService.eliminarArticulo(id, req.user.id);
         res.json({
             ok: true,
             message: "Articulo eliminado correctamente",

@@ -1,6 +1,7 @@
-import  * as proyectoRepository from "../repositories/proyecto.repository.js";
+import * as proyectoRepository from "../repositories/proyecto.repository.js";
+import { registrar } from "./auditoria.service.js";
 
-export const crearProyecto = async (data) => {
+export const crearProyecto = async (data, usuarioId) => {
     const proyectoExistente =
         await proyectoRepository.obtenerProyectos();
 
@@ -14,7 +15,7 @@ export const crearProyecto = async (data) => {
         throw error;
     }
 
-    return proyectoRepository.crearProyecto({
+    const proyecto = await proyectoRepository.crearProyecto({
         nombre: data.nombre,
         descripcion: data.descripcion || null,
         fechaInicio: data.fechaInicio
@@ -24,6 +25,17 @@ export const crearProyecto = async (data) => {
             ? new Date(data.fechaFin)
             : null,
     });
+
+    await registrar({
+        usuarioId,
+        accion: "CREAR",
+        entidad: "PROYECTO",
+        entidadId: proyecto.id,
+        descripcion: `Proyecto ${proyecto.nombre} creado`,
+        datos: data,
+    });
+
+    return proyecto;
 };
 
 export const obtenerProyectos = async (data) => {
@@ -41,10 +53,10 @@ export const obtenerProyecto = async (id) => {
     return proyecto;
 };
 
-export const ActualizarProyecto = async (id, data) => {
+export const ActualizarProyecto = async (id, data, usuarioId) => {
     await obtenerProyecto(id);
 
-    return proyectoRepository.actualizarProyecto(id, {
+    const proyecto = await proyectoRepository.actualizarProyecto(id, {
         ...data,
         fechaInicio: data.fechaInicio
             ? new Date(data.fechaInicio)
@@ -53,10 +65,31 @@ export const ActualizarProyecto = async (id, data) => {
             ? new Date(data.fechaFin)
             : null,
     });
+
+    await registrar({
+        usuarioId,
+        accion: "ACTUALIZAR",
+        entidad: "PROYECTO",
+        entidadId: proyecto.id,
+        descripcion: `Proyecto ${proyecto.nombre} actualizado`,
+        datos: data,
+    });
+
+    return proyecto;
 };
 
-export const eliminarProyecto = async (id) => {
+export const eliminarProyecto = async (id, usuarioId) => {
     await obtenerProyecto(id);
 
-    return proyectoRepository.eliminarProyecto(id);
+    const proyecto = await proyectoRepository.eliminarProyecto(id);
+
+    await registrar({
+        usuarioId,
+        accion: "ELIMINAR",
+        entidad: "PROYECTO",
+        entidadId: proyecto.id,
+        descripcion: `Proyecto ${proyecto.nombre} marcado como inactivo`,
+    });
+
+    return proyecto;
 };

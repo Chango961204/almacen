@@ -1,4 +1,15 @@
-import  prisma from "../lib/prisma.js";
+import prisma from "../lib/prisma.js";
+
+
+export const registrar = async ({ usuarioId, accion, entidad, entidadId, descripcion, datos }) => {
+    try {
+        await prisma.auditoria.create({
+            data: { usuarioId, accion, entidad, entidadId, descripcion, datos },
+        });
+    } catch (error) {
+        console.error("No se pudo registrar la auditoría:", error.message);
+    }
+};
 
 export const obtenerTodas = (filtros = {}) => {
     const where = {};
@@ -18,6 +29,8 @@ export const obtenerTodas = (filtros = {}) => {
             where.creadoEn.lte = new Date(`${filtros.hasta}T23:59:59.999Z`);
         }
     }
+
+
 
     return prisma.auditoria.findMany({
         where,
