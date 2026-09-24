@@ -121,6 +121,7 @@ export default function Auditorias() {
                 columns={columns}
                 rows={auditorias}
                 loading={loading}
+                pageSize={15}
                 emptyMessage="No hay registros de auditoría"
             />
         </div>

@@ -8,7 +8,7 @@ import { crearUsuarioSchema } from "../validations/usuario.validation.js";
 const router = Router();
 
 router.use(authMiddleware);
-router.use(authorizeRoles("SUPER_ADMIN", "ADMIN"));
+router.use(authorizeRoles("SUPER_ADMIN",));
 
 router.get("/", obtenerTodos);
 

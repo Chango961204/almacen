@@ -72,7 +72,7 @@ export default function Devoluciones() {
         { key: "proyecto", label: "Proyecto", render: (fila) => fila.salida?.proyecto?.nombre || "-" },
         { key: "motivo", label: "Motivo", render: (fila) => fila.motivo || "-" },
         { key: "articulos", label: "Artículos", render: (fila) => (
-            <span className="block max-w-[260px] truncate" title={resumenArticulos(fila)}>{resumenArticulos(fila) || "-"}</span>
+            <span className="block max-w-65 truncate" title={resumenArticulos(fila)}>{resumenArticulos(fila) || "-"}</span>
         ) },
         { key: "creado", label: "Registró", render: (fila) => fila.creadoPor?.nombre || "-" },
     ];
