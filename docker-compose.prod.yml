@@ -34,7 +34,7 @@ services:
       PORT: 4000
       DATABASE_URL: "mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/inventario"
       JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRES_IN: 15m
+      JWT_EXPIRES_IN: 1h
       COOKIE_NAME: inventario_token
       FRONTEND_URL: ${FRONTEND_URL}
 

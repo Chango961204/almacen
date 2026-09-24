@@ -33,8 +33,8 @@ async function main() {
     });
 
     const passwordHash = await bcrypt.hash(
-        "Battery..1",
-        8
+        "Password..1",
+        12
     );
 
     const usuario = await prisma.usuario.upsert({
