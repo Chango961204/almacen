@@ -5,19 +5,16 @@ services:
     restart: unless-stopped
 
     environment:
-      MYSQL_ROOT_PASSWORD: Battery..1Chekelete961204
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: inventario
-      MYSQL_USER: Luis
-      MYSQL_PASSWORD: Battery..1
-
-    ports:
-      - "3307:3306"
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
     volumes:
       - inventario_mysql_data:/var/lib/mysql
 
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pBattery..1Chekelete961204"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -33,13 +30,13 @@ services:
         condition: service_healthy
 
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       PORT: 4000
-      DATABASE_URL: "mysql://root:Battery..1Chekelete961204@mysql:3306/inventario"
-      JWT_SECRET: "4e3S9jPcGEj6mB2e2UoGJcDUFVb8AUuRUI8SFXpIRxeQJc26pIDmr3aD8K5ddRyH"
+      DATABASE_URL: "mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/inventario"
+      JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: 15m
       COOKIE_NAME: inventario_token
-      FRONTEND_URL: "http://localhost:3000"
+      FRONTEND_URL: ${FRONTEND_URL}
 
   frontend:
     build:
@@ -51,7 +48,7 @@ services:
       - backend
 
     ports:
-      - "3000:80"
+      - "127.0.0.1:3000:80"
 
 volumes:
   inventario_mysql_data:
