@@ -15,7 +15,7 @@ export default function Table({ columns, rows, actions, loading = false, emptyMe
     }
 
     return (
-        <div className="glass animate-slide-up overflow-hidden rounded-[1.5rem]">
+        <div className="glass animate-slide-up overflow-hidden rounded-3xl">
             <table className="min-w-full divide-y divide-white/60 text-sm">
                 <thead className="bg-white/35">
                     <tr>

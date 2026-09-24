@@ -4,13 +4,13 @@ import { useAuth } from "../context/AuthContext";
 
 const menuItems = [
     { to: "/", label: "Inicio", icon: LayoutDashboard },
-    { to: "/articulos", label: "Artículos", icon: Boxes },
     { to: "/proyectos", label: "Proyectos", icon: FolderKanban },
-    { to: "/inventario", label: "Inventario", icon: Warehouse },
+    { to: "/articulos", label: "Artículos", icon: Boxes },
     { to: "/entradas", label: "Entradas", icon: PackagePlus },
+    { to: "/inventario", label: "Inventario", icon: Warehouse },
     { to: "/salidas", label: "Salidas", icon: PackageMinus },
     { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw },
-    { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN",] },
     { to: "/auditorias", label: "Auditorías", icon: History, roles: ["SUPER_ADMIN"] },
 ];
 

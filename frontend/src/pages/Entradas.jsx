@@ -51,7 +51,10 @@ export default function Entradas() {
         }
     }
 
-    const contarDetalles = (entrada) => entrada.detalles?.length || 0;
+    const resumenArticulos = (entrada) =>
+        (entrada.detalles || [])
+            .map((d) => `${d.articulo?.nombre || "?"} x${d.cantidad}`)
+            .join(", ");
 
     const columns = [
         { key: "id", label: "#", render: (fila) => fila.id },
@@ -59,7 +62,9 @@ export default function Entradas() {
         { key: "factura", label: "Factura", render: (fila) => fila.folioFactura || "-" },
         { key: "requisicion", label: "Requisición", render: (fila) => fila.folioRequisicion || "-" },
         { key: "proveedor", label: "Proveedor", render: (fila) => fila.proveedor || "-" },
-        { key: "articulos", label: "Artículos", render: (fila) => `${contarDetalles(fila)} renglón(es)` },
+        { key: "articulos", label: "Artículos", render: (fila) => (
+            <span className="block max-w-[260px] truncate" title={resumenArticulos(fila)}>{resumenArticulos(fila) || "-"}</span>
+        ) },
         { key: "creado", label: "Registró", render: (fila) => fila.creadoPor?.nombre || "-" },
     ];
 

@@ -9,10 +9,12 @@ const coloresAccion = {
     CREAR: "green",
     ACTUALIZAR: "blue",
     ELIMINAR: "red",
+    LOGIN: "green",
+    LOGOUT: "gray",
 };
 
-const entidades = ["ENTRADA", "SALIDA", "DEVOLUCION", "USUARIO"];
-const acciones = ["CREAR", "ACTUALIZAR", "ELIMINAR"];
+const entidades = ["ENTRADA", "SALIDA", "DEVOLUCION", "USUARIO", "ARTICULO", "PROYECTO", "MARCA", "UNIDAD_MEDIDA", "SESION"];
+const acciones = ["CREAR", "ACTUALIZAR", "ELIMINAR", "LOGIN", "LOGOUT"];
 
 function formatearFechaHora(iso) {
     if (!iso) return "-";

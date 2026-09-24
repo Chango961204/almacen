@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Loader2 } from "lucide-react";
+import { toast } from "react-hot-toast";
 import Modal from "./Modal";
 import Field from "./Field";
 
@@ -13,6 +14,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
     const [observaciones, setObservaciones] = useState("");
 
     const [detalles, setDetalles] = useState([]);
+    const [guardando, setGuardando] = useState(false);
 
     useEffect(() => {
         if (open) {
@@ -23,11 +25,12 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
             setDistribuidor("");
             setObservaciones("");
             setDetalles([]);
+            setGuardando(false);
         }
     }, [open]);
 
     function agregarDetalle() {
-        setDetalles([...detalles, { proyectoId: "", articuloId: "", cantidad: "" }]);
+        setDetalles([...detalles, { proyectoId: "", articulo: "", cantidad: "" }]);
     }
 
     function actualizarDetalle(indice, campo, valor) {
@@ -38,24 +41,55 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
         setDetalles(detalles.filter((_, i) => i !== indice));
     }
 
-    function handleSubmit(e) {
+    // Convierte el artículo escrito (texto libre) en su id.
+    // Si el nombre no existe en el catálogo, cancela el guardado.
+    function resolverArticulos(detallesValidos) {
+        return detallesValidos.map((d) => {
+            const nombre = d.articulo.trim();
+
+            const articulo = articulos.find(
+                (a) => a.nombre.toLowerCase() === nombre.toLowerCase()
+            );
+
+            if (!articulo) {
+                const error = new Error(
+                    `El artículo "${nombre}" no existe. Regístralo primero en Artículos`
+                );
+                throw error;
+            }
+
+            return {
+                proyectoId: Number(d.proyectoId),
+                articuloId: articulo.id,
+                cantidad: Number(d.cantidad),
+            };
+        });
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        const detallesValidos = detalles.filter((d) => d.proyectoId && d.articuloId && d.cantidad);
+        const detallesValidos = detalles.filter(
+            (d) => d.proyectoId && d.articulo.trim() && d.cantidad
+        );
 
-        onSave({
-            folioFactura: folioFactura || undefined,
-            folioRequisicion: folioRequisicion || undefined,
-            fechaRecepcion: `${fechaRecepcion}T00:00:00.000Z`,
-            proveedor: proveedor || undefined,
-            distribuidor: distribuidor || undefined,
-            observaciones: observaciones || undefined,
-            detalles: detallesValidos.map((d) => ({
-                proyectoId: Number(d.proyectoId),
-                articuloId: Number(d.articuloId),
-                cantidad: Number(d.cantidad),
-            })),
-        });
+        setGuardando(true);
+
+        try {
+            await onSave({
+                folioFactura: folioFactura || undefined,
+                folioRequisicion: folioRequisicion || undefined,
+                fechaRecepcion: `${fechaRecepcion}T00:00:00.000Z`,
+                proveedor: proveedor || undefined,
+                distribuidor: distribuidor || undefined,
+                observaciones: observaciones || undefined,
+                detalles: resolverArticulos(detallesValidos),
+            });
+        } catch (error) {
+            toast.error(error.message || "No se pudo registrar la entrada");
+        } finally {
+            setGuardando(false);
+        }
     }
 
     return (
@@ -111,12 +145,14 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                         ))}
                                     </select>
 
-                                    <select value={d.articuloId} onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)} className="input-base py-2 text-sm">
-                                        <option value="">Artículo</option>
-                                        {articulos.map((a) => (
-                                            <option key={a.id} value={a.id}>{a.nombre}</option>
-                                        ))}
-                                    </select>
+                                    <input
+                                        type="text"
+                                        value={d.articulo}
+                                        onChange={(e) => actualizarDetalle(index, "articulo", e.target.value)}
+                                        list="articulos-datalist"
+                                        className="input-base py-2 text-sm"
+                                        placeholder="Escribe o elige un artículo"
+                                    />
 
                                     <input type="number" value={d.cantidad} onChange={(e) => actualizarDetalle(index, "cantidad", e.target.value)} placeholder="Cant." className="input-base py-2 text-sm" />
 
@@ -125,16 +161,28 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                     </button>
                                 </div>
                             ))}
+                            <datalist id="articulos-datalist">
+                                {articulos.map((a) => (
+                                    <option key={a.id} value={a.nombre} />
+                                ))}
+                            </datalist>
                         </div>
                     )}
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={onClose} className="btn btn-secondary">
+                    <button type="button" onClick={onClose} disabled={guardando} className="btn btn-secondary">
                         Cancelar
                     </button>
-                    <button type="submit" disabled={detalles.length === 0} className="btn btn-primary">
-                        Guardar Entrada
+                    <button type="submit" disabled={detalles.length === 0 || guardando} className="btn btn-primary">
+                        {guardando ? (
+                            <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Guardando...
+                            </>
+                        ) : (
+                            "Guardar Entrada"
+                        )}
                     </button>
                 </div>
             </form>

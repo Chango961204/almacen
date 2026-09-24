@@ -66,6 +66,8 @@ export default function Articulos() {
             }
             setModalAbierto(false);
             cargarArticulos();
+            getMarcas().then(setMarcas).catch(() => setMarcas([]));
+            getUnidadesMedida().then(setUnidadesMedida).catch(() => setUnidadesMedida([]));
         } catch (error) {
             toast.error(error.response?.data?.message || "No se pudo guardar el artículo");
         }

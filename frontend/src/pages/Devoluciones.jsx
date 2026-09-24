@@ -59,6 +59,11 @@ export default function Devoluciones() {
         }
     }
 
+    const resumenArticulos = (devolucion) =>
+        (devolucion.detalles || [])
+            .map((d) => `${d.salidaDetalle?.articulo?.nombre || "?"} x${d.cantidad}`)
+            .join(", ");
+
     const columns = [
         { key: "id", label: "#", render: (fila) => fila.id },
         { key: "folio", label: "Folio" },
@@ -66,7 +71,9 @@ export default function Devoluciones() {
         { key: "salida", label: "Salida", render: (fila) => fila.salida?.folio || "-" },
         { key: "proyecto", label: "Proyecto", render: (fila) => fila.salida?.proyecto?.nombre || "-" },
         { key: "motivo", label: "Motivo", render: (fila) => fila.motivo || "-" },
-        { key: "articulos", label: "Artículos", render: (fila) => `${fila.detalles?.length || 0} renglón(es)` },
+        { key: "articulos", label: "Artículos", render: (fila) => (
+            <span className="block max-w-[260px] truncate" title={resumenArticulos(fila)}>{resumenArticulos(fila) || "-"}</span>
+        ) },
         { key: "creado", label: "Registró", render: (fila) => fila.creadoPor?.nombre || "-" },
     ];
 

@@ -48,7 +48,7 @@ export default function ProyectoModal({ open, onClose, onSave, proyecto }) {
                         onChange={(e) => setNombre(e.target.value)}
                         required
                         className="input-base"
-                        placeholder="Ej. Construcción Torre Norte"
+                        placeholder="Ej. Bacheo/Alumbrado"
                     />
                 </Field>
 

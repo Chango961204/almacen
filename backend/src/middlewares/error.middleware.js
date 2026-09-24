@@ -40,9 +40,36 @@ export function errorMiddleware(error, req, res, next) {
     }
 
     if (error.code === "P2002") {
+        const mensajesPorConstraint = {
+            articulos_codigo_key: "el código",
+            articulos_nombre_key: "el nombre",
+            marcas_nombre_key: "el nombre de marca",
+            unidades_medida_nombre_key: "el nombre de unidad de medida",
+            unidades_medida_simbolo_key: "el símbolo de unidad de medida",
+            proyectos_nombre_key: "el nombre de proyecto",
+            usuarios_email_key: "el correo",
+            roles_nombre_key: "el nombre de rol",
+            salidas_folio_key: "el folio",
+            devoluciones_folio_key: "el folio",
+            entrada_detalles_entradaId_proyectoId_articuloId_key:
+                "ese artículo en esta entrada para ese proyecto",
+            salida_detalles_salidaId_articuloId_key:
+                "ese artículo en esta salida",
+            devolucion_detalles_devolucionId_salidaDetalleId_key:
+                "ese artículo en esta devolución",
+        };
+
+        const constraint = Array.isArray(error.meta?.target)
+            ? error.meta.target.join("_")
+            : error.meta?.target;
+
+        const mensaje = mensajesPorConstraint[constraint]
+            ? `Ya existe un registro con ${mensajesPorConstraint[constraint]}.`
+            : "Ya existe un registro con esos datos.";
+
         return res.status(409).json({
             success: false,
-            message: "Ya existe un registro con esos datos",
+            message: mensaje,
         });
     }
 

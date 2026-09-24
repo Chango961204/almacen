@@ -87,7 +87,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                     </Field>
 
                     <Field label="Motivo">
-                        <input type="text" value={motivo} onChange={(e) => setMotivo(e.target.value)} required minLength={3} className="input-base" placeholder="Ej. Material en buen estado" />
+                        <input type="text" value={motivo} onChange={(e) => setMotivo(e.target.value)} required minLength={3} className="input-base" placeholder="Ej. Material en mal estado" />
                     </Field>
                 </div>
 

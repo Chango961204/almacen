@@ -52,13 +52,20 @@ export default function Salidas() {
         }
     }
 
+    const resumenArticulos = (salida) =>
+        (salida.detalles || [])
+            .map((d) => `${d.articulo?.nombre || "?"} x${d.cantidad}`)
+            .join(", ");
+
     const columns = [
         { key: "id", label: "#", render: (fila) => fila.id },
         { key: "folio", label: "Folio" },
         { key: "fecha", label: "Fecha", render: (fila) => formatearFecha(fila.fecha) },
         { key: "proyecto", label: "Proyecto", render: (fila) => fila.proyecto?.nombre || "-" },
         { key: "responsable", label: "Responsable", render: (fila) => fila.responsable || "-" },
-        { key: "articulos", label: "Artículos", render: (fila) => `${fila.detalles?.length || 0} renglón(es)` },
+        { key: "articulos", label: "Artículos", render: (fila) => (
+            <span className="block max-w-[260px] truncate" title={resumenArticulos(fila)}>{resumenArticulos(fila) || "-"}</span>
+        ) },
         { key: "creado", label: "Registró", render: (fila) => fila.creadoPor?.nombre || "-" },
     ];
 

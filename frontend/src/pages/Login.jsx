@@ -46,16 +46,16 @@ export default function Login() {
             <div className="animate-blob pointer-events-none absolute left-1/2 top-1/3 h-64 w-64 rounded-full bg-pink-300/30 blur-3xl" style={{ animationDelay: "6s" }} />
 
             <div className="animate-scale-in relative w-full max-w-md">
-                <div className="glass rounded-[2rem] p-8">
+                <div className="glass rounded-4xl p-8">
                     <div className="mb-8 flex flex-col items-center text-center">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-[1.4rem] bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/40 ring-1 ring-white/50">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-[1.4rem] bg-linear-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/40 ring-1 ring-white/50">
                             <Warehouse className="h-8 w-8" />
                         </div>
                         <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
-                            Sistema de Inventario
+                            Sistema para el Almacen
                         </h1>
                         <p className="mt-1 text-sm text-slate-500">
-                            Inicia sesión para continuar
+                            Inicia sesión
                         </p>
                     </div>
 
@@ -97,7 +97,7 @@ export default function Login() {
                 </div>
 
                 <p className="mt-6 text-center text-sm text-slate-400">
-                    Almacén central · Gestión de inventario
+                    PMZ
                 </p>
             </div>
         </main>
