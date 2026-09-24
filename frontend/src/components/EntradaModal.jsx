@@ -95,7 +95,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
     return (
         <Modal open={open} onClose={onClose} title="Nueva Entrada al Almacén">
             <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Folio Factura">
                         <input type="text" value={folioFactura} onChange={(e) => setFolioFactura(e.target.value)} className="input-base" placeholder="Ej. FAC-001" />
                     </Field>
@@ -137,8 +137,8 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                     ) : (
                         <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => (
-                                <div key={index} className="grid grid-cols-[1fr_1.5fr_0.6fr_auto] items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300">
-                                    <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base py-2 text-sm">
+                                <div key={index} className="grid grid-cols-2 items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300 sm:grid-cols-[1fr_1.5fr_0.6fr_auto]">
+                                <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base col-span-2 py-2 text-sm sm:col-span-1">
                                         <option value="">Proyecto</option>
                                         {proyectos.map((p) => (
                                             <option key={p.id} value={p.id}>{p.nombre}</option>
@@ -150,7 +150,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                         value={d.articulo}
                                         onChange={(e) => actualizarDetalle(index, "articulo", e.target.value)}
                                         list="articulos-datalist"
-                                        className="input-base py-2 text-sm"
+                                        className="input-base col-span-2 py-2 text-sm sm:col-span-1"
                                         placeholder="Escribe o elige un artículo"
                                     />
 

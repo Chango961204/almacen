@@ -71,7 +71,7 @@ export default function Home() {
 
     return (
         <div className="space-y-8">
-            <div className="glass animate-slide-up relative overflow-hidden rounded-[1.75rem] p-8">
+            <div className="glass animate-slide-up relative overflow-hidden rounded-[1.75rem] p-5 sm:p-8">
                 <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-sky-300/40 blur-3xl" />
                 <div className="pointer-events-none absolute -bottom-20 left-1/3 h-52 w-52 rounded-full bg-violet-300/40 blur-3xl" />
                 <div className="relative flex flex-wrap items-center justify-between gap-4">
@@ -79,7 +79,7 @@ export default function Home() {
                         <p className="text-sm font-medium capitalize text-slate-500">
                             {hoy}
                         </p>
-                        <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-900">
+                        <h2 className="mt-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
                             Bienvenido, {usuario?.nombre}
                         </h2>
                         <p className="mt-2 max-w-xl text-sm text-slate-500">
@@ -87,7 +87,7 @@ export default function Home() {
                             de material y mantén las existencias al día.
                         </p>
                     </div>
-                    <Link to="/inventario" className="group flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:shadow-xl hover:shadow-indigo-500/40">
+                    <Link to="/inventario" className="group flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:shadow-xl hover:shadow-indigo-500/40 sm:w-auto">
                         Ver inventario
                         <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                     </Link>

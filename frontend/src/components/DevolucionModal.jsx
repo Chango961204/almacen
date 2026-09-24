@@ -64,7 +64,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
     return (
         <Modal open={open} onClose={onClose} title="Nueva Devolución">
             <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Folio">
                         <input type="text" value={folio} onChange={(e) => setFolio(e.target.value)} required className="input-base" placeholder="Ej. DEV-001" />
                     </Field>
@@ -81,7 +81,7 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                     </Field>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Fecha">
                         <input type="date" value={fecha} onChange={(e) => setFecha(e.target.value)} required className="input-base" />
                     </Field>
@@ -110,8 +110,8 @@ export default function DevolucionModal({ open, onClose, onSave, salidas }) {
                                 const salidaDetalle = salidaElegida.detalles[index];
 
                                 return (
-                                    <div key={d.salidaDetalleId} className="grid grid-cols-[1.5fr_0.6fr_0.7fr] items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300">
-                                        <div className="px-1 text-sm font-medium text-slate-700">
+                                    <div key={d.salidaDetalleId} className="grid grid-cols-2 items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300 sm:grid-cols-[1.5fr_0.6fr_0.7fr]">
+                                        <div className="col-span-2 px-1 text-sm font-medium text-slate-700 sm:col-span-1">
                                             {salidaDetalle?.articulo?.nombre || "Artículo"}
                                         </div>
 

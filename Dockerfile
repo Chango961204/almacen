@@ -28,4 +28,4 @@ COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
 ENV NODE_ENV=production
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.js && node src/server.js"]
+CMD ["sh", "-c", "case \"$DATABASE_URL\" in mysql://*) echo '[DB] DATABASE_URL OK: comienza con mysql://' ;; *) echo '[DB] ERROR: DATABASE_URL no comienza con mysql://. Revisa que el valor no lleve comillas, espacios ni el prefijo DATABASE_URL='; exit 1 ;; esac && npx prisma migrate deploy && node prisma/seed.js && node src/server.js"]

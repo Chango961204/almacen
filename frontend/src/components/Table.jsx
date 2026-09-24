@@ -34,23 +34,23 @@ export default function Table({ columns, rows, actions, loading = false, emptyMe
                     <thead className="bg-white/35">
                         <tr>
                             {columns.map((col) => (
-                                <th key={col.key} className="px-5 py-3.5 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
+                                <th key={col.key} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-wider text-slate-500 sm:px-5">
                                     {col.label}
                                 </th>
                             ))}
-                            {actions && <th className="px-5 py-3.5 text-right text-xs font-bold uppercase tracking-wider text-slate-500">Acciones</th>}
+                            {actions && <th className="px-3 py-3 text-right text-xs font-bold uppercase tracking-wider text-slate-500 sm:px-5">Acciones</th>}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-white/50">
                         {filasPagina.map((row, index) => (
                             <tr key={row.id ?? index} className="transition-colors duration-150 hover:bg-blue-500/10">
                                 {columns.map((col) => (
-                                    <td key={col.key} className="px-5 py-3.5 text-slate-700">
+                                    <td key={col.key} className="px-3 py-3 text-slate-700 sm:px-5">
                                         {col.render ? col.render(row) : row[col.key]}
                                     </td>
                                 ))}
                                 {actions && (
-                                    <td className="px-5 py-3.5 text-right">
+                                    <td className="px-3 py-3 text-right sm:px-5">
                                         <div className="flex justify-end gap-1.5">
                                             {actions(row)}
                                         </div>

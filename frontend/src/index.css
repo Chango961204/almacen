@@ -37,12 +37,24 @@ body {
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
     background:
         radial-gradient(1000px 640px at 88% -8%, rgb(125 211 252 / 0.5), transparent 60%),
         radial-gradient(900px 620px at -8% 18%, rgb(196 181 253 / 0.55), transparent 55%),
         radial-gradient(820px 560px at 55% 115%, rgb(253 186 116 / 0.45), transparent 60%),
         linear-gradient(140deg, #eff6ff 0%, #f5f3ff 52%, #fdf2f8 100%);
     background-attachment: fixed;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    touch-action: manipulation;
 }
 
 /* ======================================================

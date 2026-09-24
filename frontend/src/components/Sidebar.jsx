@@ -14,14 +14,27 @@ const menuItems = [
     { to: "/auditorias", label: "Auditorías", icon: History, roles: ["SUPER_ADMIN"] },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ abierta = false, onCerrar = () => {} }) {
     const { usuario } = useAuth();
     const itemsVisibles = menuItems.filter(
         (item) => !item.roles || item.roles.includes(usuario?.rol)
     );
 
     return (
-        <aside className="flex h-full w-64 shrink-0 flex-col border-r border-white/60 bg-white/40 backdrop-blur-2xl">
+        <>
+            <div
+                className={`fixed inset-0 z-40 bg-slate-900/30 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+                    abierta ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+                onClick={onCerrar}
+                aria-hidden="true"
+            />
+
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col border-r border-white/60 bg-white/40 backdrop-blur-2xl transition-transform duration-300 lg:static lg:translate-x-0 ${
+                    abierta ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
             <div className="flex h-16 items-center gap-3 border-b border-white/50 px-5">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-indigo-500/30 ring-1 ring-white/40">
                     <Warehouse className="h-5 w-5" />
@@ -42,6 +55,7 @@ export default function Sidebar() {
                             key={item.to}
                             to={item.to}
                             end={isHome}
+                            onClick={onCerrar}
                             className={({ isActive }) =>
                                 `group relative flex items-center gap-3 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${isActive
                                     ? "bg-linear-to-r from-blue-500/15 to-indigo-500/15 text-blue-700 shadow-[inset_0_1px_0_rgb(255_255_255/0.6)]"
@@ -68,6 +82,7 @@ export default function Sidebar() {
                     Almacén Central
                 </p>
             </div>
-        </aside>
+            </aside>
+        </>
     );
 }

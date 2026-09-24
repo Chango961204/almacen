@@ -53,7 +53,7 @@ export default function SalidaModal({ open, onClose, onSave, proyectos, articulo
     return (
         <Modal open={open} onClose={onClose} title="Nueva Salida">
             <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Folio">
                         <input type="text" value={folio} onChange={(e) => setFolio(e.target.value)} required className="input-base" placeholder="Ej. SAL-001" />
                     </Field>
@@ -92,8 +92,8 @@ export default function SalidaModal({ open, onClose, onSave, proyectos, articulo
                     ) : (
                         <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => (
-                                <div key={index} className="grid grid-cols-[1.5fr_0.6fr_auto] items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300">
-                                    <select value={d.articuloId} onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)} className="input-base py-2 text-sm">
+                                <div key={index} className="grid grid-cols-2 items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300 sm:grid-cols-[1.5fr_0.6fr_auto]">
+                                    <select value={d.articuloId} onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)} className="input-base col-span-2 py-2 text-sm sm:col-span-1">
                                         <option value="">Artículo</option>
                                         {articulos.map((a) => (
                                             <option key={a.id} value={a.id}>{a.nombre}</option>

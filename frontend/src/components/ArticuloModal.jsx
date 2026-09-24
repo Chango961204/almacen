@@ -151,7 +151,7 @@ export default function ArticuloModal({ open, onClose, onSave, articulo, marcas,
                     <input type="text" value={codigo} onChange={(e) => setCodigo(e.target.value)} className="input-base" placeholder="Ej. ABC-123" />
                 </Field>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <Field label="Marca">
                         <input
                             type="text"
