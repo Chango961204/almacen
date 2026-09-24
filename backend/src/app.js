@@ -1,3 +1,6 @@
+import { existsSync } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -7,6 +10,8 @@ import rateLimit from "express-rate-limit";
 import { env } from "./config/env.js";
 import routes from "./routes/index.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -46,6 +51,20 @@ app.use("/api/auth/login", loginLimiter);
 app.use(morgan("dev"));
 
 app.use("/api", routes);
+
+const frontendDist = path.join(__dirname, "../../frontend/dist");
+
+if (existsSync(frontendDist)) {
+    app.use(express.static(frontendDist));
+
+    app.use((req, res, next) => {
+        if (req.method !== "GET" || req.path.startsWith("/api")) {
+            return next();
+        }
+
+        res.sendFile(path.join(frontendDist, "index.html"));
+    });
+}
 
 app.use(errorMiddleware);
 

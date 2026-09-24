@@ -33,7 +33,7 @@ async function main() {
     });
 
     const passwordHash = await bcrypt.hash(
-        "Password..1",
+        process.env.SEED_ADMIN_PASSWORD || "Password..1",
         12
     );
 
