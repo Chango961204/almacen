@@ -92,35 +92,10 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
         }
     }
 
+
     return (
         <Modal open={open} onClose={onClose} title="Nueva Entrada al Almacén">
             <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field label="Folio Factura">
-                        <input type="text" value={folioFactura} onChange={(e) => setFolioFactura(e.target.value)} className="input-base" placeholder="Ej. FAC-001" />
-                    </Field>
-
-                    <Field label="Folio Requisición">
-                        <input type="text" value={folioRequisicion} onChange={(e) => setFolioRequisicion(e.target.value)} className="input-base" placeholder="Ej. REQ-001" />
-                    </Field>
-
-                    <Field label="Fecha de recepción">
-                        <input type="date" value={fechaRecepcion} onChange={(e) => setFechaRecepcion(e.target.value)} required className="input-base" />
-                    </Field>
-
-                    <Field label="Proveedor">
-                        <input type="text" value={proveedor} onChange={(e) => setProveedor(e.target.value)} className="input-base" />
-                    </Field>
-
-                    <Field label="Distribuidor">
-                        <input type="text" value={distribuidor} onChange={(e) => setDistribuidor(e.target.value)} className="input-base" />
-                    </Field>
-                </div>
-
-                <Field label="Observaciones">
-                    <textarea value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="input-base" />
-                </Field>
-
                 <div>
                     <div className="mb-2 flex items-center justify-between">
                         <p className="text-sm font-medium text-slate-700">Artículos recibidos</p>
@@ -138,7 +113,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                         <div className="animate-slide-up space-y-2">
                             {detalles.map((d, index) => (
                                 <div key={index} className="grid grid-cols-2 items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300 sm:grid-cols-[1fr_1.5fr_0.6fr_auto]">
-                                <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base col-span-2 py-2 text-sm sm:col-span-1">
+                                    <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base col-span-2 py-2 text-sm sm:col-span-1">
                                         <option value="">Proyecto</option>
                                         {proyectos.map((p) => (
                                             <option key={p.id} value={p.id}>{p.nombre}</option>
@@ -169,6 +144,32 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                         </div>
                     )}
                 </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field label="Folio Factura">
+                        <input type="text" value={folioFactura} onChange={(e) => setFolioFactura(e.target.value)} className="input-base" placeholder="Ej. FAC-001" />
+                    </Field>
+
+                    <Field label="Folio Requisición">
+                        <input type="text" value={folioRequisicion} onChange={(e) => setFolioRequisicion(e.target.value)} className="input-base" placeholder="Ej. REQ-001" />
+                    </Field>
+
+                    <Field label="Fecha de recepción">
+                        <input type="date" value={fechaRecepcion} onChange={(e) => setFechaRecepcion(e.target.value)} required className="input-base" />
+                    </Field>
+
+                    <Field label="Proveedor">
+                        <input type="text" value={proveedor} onChange={(e) => setProveedor(e.target.value)} className="input-base" />
+                    </Field>
+
+                    <Field label="Distribuidor">
+                        <input type="text" value={distribuidor} onChange={(e) => setDistribuidor(e.target.value)} className="input-base" />
+                    </Field>
+                </div>
+
+                <Field label="Observaciones">
+                    <textarea value={observaciones} onChange={(e) => setObservaciones(e.target.value)} rows={2} className="input-base" />
+                </Field>
+
 
                 <div className="flex justify-end gap-3 pt-2">
                     <button type="button" onClick={onClose} disabled={guardando} className="btn btn-secondary">
