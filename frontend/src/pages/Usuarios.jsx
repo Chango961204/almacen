@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { format, parseISO } from "date-fns";
 import { getUsuarios, crearUsuario } from "../services/usuarioService";
+import { useAuth } from "../context/AuthContext";
 import PageHeader from "../components/PageHeader";
 import Table from "../components/Table";
 import Badge from "../components/Badge";
@@ -19,10 +20,14 @@ function formatearFechaHora(iso) {
 }
 
 export default function Usuarios() {
+    const { usuario } = useAuth();
     const [usuarios, setUsuarios] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [modalAbierto, setModalAbierto] = useState(false);
+
+    // Solo el SUPER_ADMIN puede crear usuarios; el ADMIN solo consulta la lista.
+    const puedeCrear = usuario?.rol === "SUPER_ADMIN";
 
     async function cargarUsuarios() {
         setLoading(true);
@@ -63,7 +68,12 @@ export default function Usuarios() {
 
     return (
         <div className="animate-fade-in">
-            <PageHeader title="Usuarios" subtitle="Registra y consulta los usuarios del sistema" onAdd={() => setModalAbierto(true)} addLabel="Nuevo Usuario" />
+            <PageHeader
+                title="Usuarios"
+                subtitle="Registra y consulta los usuarios del sistema"
+                onAdd={puedeCrear ? () => setModalAbierto(true) : undefined}
+                addLabel="Nuevo Usuario"
+            />
 
             {error && <div className="alert-error">{error}</div>}
 
@@ -74,11 +84,13 @@ export default function Usuarios() {
                 emptyMessage="No hay usuarios registrados"
             />
 
-            <UsuarioModal
-                open={modalAbierto}
-                onClose={() => setModalAbierto(false)}
-                onSave={handleSave}
-            />
+            {puedeCrear && (
+                <UsuarioModal
+                    open={modalAbierto}
+                    onClose={() => setModalAbierto(false)}
+                    onSave={handleSave}
+                />
+            )}
         </div>
     );
 }

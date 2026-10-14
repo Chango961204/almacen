@@ -8,10 +8,10 @@ import { crearUsuarioSchema } from "../validations/usuario.validation.js";
 const router = Router();
 
 router.use(authMiddleware);
-router.use(authorizeRoles("SUPER_ADMIN",));
 
-router.get("/", obtenerTodos);
+// El ADMIN puede ver la lista, pero solo el SUPER_ADMIN puede crear usuarios
+router.get("/", authorizeRoles("SUPER_ADMIN", "ADMIN"), obtenerTodos);
 
-router.post("/", validate(crearUsuarioSchema), crearUsuario);
+router.post("/", authorizeRoles("SUPER_ADMIN"), validate(crearUsuarioSchema), crearUsuario);
 
 export default router;

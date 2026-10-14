@@ -12,6 +12,10 @@ dist/
 .env.local
 **/.env.local
 *.env
+backend/.env.prod
+
+# Scripts locales de conexion a produccion
+backend/studio-prod.ps1
 
 # Logs
 *.log

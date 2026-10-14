@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Pencil, Trash2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 import { getProyectos, crearProyecto, actualizarProyecto, eliminarProyecto } from "../services/proyectoService";
 import PageHeader from "../components/PageHeader";
 import Table from "../components/Table";
@@ -15,6 +16,10 @@ function formatearFecha(iso) {
 }
 
 export default function Proyectos() {
+    const { usuario } = useAuth();
+    // Solo el SUPER_ADMIN puede eliminar; el ADMIN crea, ve y edita.
+    const puedeEliminar = usuario?.rol === "SUPER_ADMIN";
+
     const [proyectos, setProyectos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -111,9 +116,11 @@ export default function Proyectos() {
                         <button onClick={() => abrirEditar(fila)} className="btn-icon" title="Editar">
                             <Pencil className="h-4 w-4" />
                         </button>
-                        <button onClick={() => setConfirmarBorrar(fila)} className="btn-icon btn-icon-danger" title="Eliminar">
-                            <Trash2 className="h-4 w-4" />
-                        </button>
+                        {puedeEliminar && (
+                            <button onClick={() => setConfirmarBorrar(fila)} className="btn-icon btn-icon-danger" title="Eliminar">
+                                <Trash2 className="h-4 w-4" />
+                            </button>
+                        )}
                     </>
                 )}
             />
@@ -131,7 +138,7 @@ export default function Proyectos() {
                 onConfirm={handleEliminar}
                 loading={borrando}
                 title="Eliminar proyecto"
-                message={`¿Seguro que deseas eliminar "${confirmarBorrar?.nombre}"?`}
+                message={`¿Seguro que deseas eliminar "${confirmarBorrar?.nombre}"? Dejará de mostrarse en los desplegables; su historial de movimientos se conserva.`}
             />
         </div>
     );

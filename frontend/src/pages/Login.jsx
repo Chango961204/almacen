@@ -14,7 +14,12 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
 
     if (usuario) {
-        return <Navigate to="/" replace />;
+        return (
+            <Navigate
+                to={usuario.rol === "USUARIO" ? "/inventario" : "/"}
+                replace
+            />
+        );
     }
 
     async function handleSubmit(event) {
@@ -24,9 +29,9 @@ export default function Login() {
         setLoading(true);
 
         try {
-            await login(email, password);
+            const data = await login(email, password);
 
-            navigate("/", {
+            navigate(data?.usuario?.rol === "USUARIO" ? "/inventario" : "/", {
                 replace: true,
             });
         } catch (error) {

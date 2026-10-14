@@ -115,7 +115,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                 <div key={index} className="grid grid-cols-2 items-center gap-2 rounded-xl border border-white/70 bg-white/40 p-2 backdrop-blur-sm transition-all duration-150 hover:border-indigo-300 sm:grid-cols-[1fr_1.5fr_0.6fr_auto]">
                                     <select value={d.proyectoId} onChange={(e) => actualizarDetalle(index, "proyectoId", e.target.value)} className="input-base col-span-2 py-2 text-sm sm:col-span-1">
                                         <option value="">Proyecto</option>
-                                        {proyectos.map((p) => (
+                                        {proyectos.filter((p) => p.activo).map((p) => (
                                             <option key={p.id} value={p.id}>{p.nombre}</option>
                                         ))}
                                     </select>
@@ -137,7 +137,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                 </div>
                             ))}
                             <datalist id="articulos-datalist">
-                                {articulos.map((a) => (
+                                {articulos.filter((a) => a.activo).map((a) => (
                                     <option key={a.id} value={a.nombre} />
                                 ))}
                             </datalist>

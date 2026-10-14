@@ -86,7 +86,7 @@ export default function Inventario() {
                     <label className="text-sm font-medium text-slate-700">Proyecto</label>
                     <select value={proyectoId} onChange={(e) => setProyectoId(e.target.value)} className="input-base">
                         <option value="">Selecciona un proyecto</option>
-                        {proyectos.map((p) => (
+                        {proyectos.filter((p) => p.activo).map((p) => (
                             <option key={p.id} value={p.id}>{p.nombre}</option>
                         ))}
                     </select>

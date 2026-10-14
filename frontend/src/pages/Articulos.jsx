@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Pencil, Trash2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 import { getArticulos, crearArticulo, actualizarArticulo, eliminarArticulo } from "../services/articuloService";
 import { getMarcas } from "../services/marcaService";
 import { getUnidadesMedida } from "../services/unidadMedidaService";
@@ -11,6 +12,10 @@ import ArticuloModal from "../components/ArticuloModal";
 import ConfirmDialog from "../components/ConfirmDialog";
 
 export default function Articulos() {
+    const { usuario } = useAuth();
+    // Solo el SUPER_ADMIN puede eliminar; el ADMIN crea, ve y edita.
+    const puedeEliminar = usuario?.rol === "SUPER_ADMIN";
+
     const [articulos, setArticulos] = useState([]);
     const [marcas, setMarcas] = useState([]);
     const [unidadesMedida, setUnidadesMedida] = useState([]);
@@ -115,9 +120,11 @@ export default function Articulos() {
                         <button onClick={() => abrirEditar(fila)} className="btn-icon" title="Editar">
                             <Pencil className="h-4 w-4" />
                         </button>
-                        <button onClick={() => setConfirmarBorrar(fila)} className="btn-icon btn-icon-danger" title="Eliminar">
-                            <Trash2 className="h-4 w-4" />
-                        </button>
+                        {puedeEliminar && (
+                            <button onClick={() => setConfirmarBorrar(fila)} className="btn-icon btn-icon-danger" title="Eliminar">
+                                <Trash2 className="h-4 w-4" />
+                            </button>
+                        )}
                     </>
                 )}
             />
@@ -137,7 +144,7 @@ export default function Articulos() {
                 onConfirm={handleEliminar}
                 loading={borrando}
                 title="Eliminar artículo"
-                message={`¿Seguro que deseas eliminar "${confirmarBorrar?.nombre}"?`}
+                message={`¿Seguro que deseas eliminar "${confirmarBorrar?.nombre}"? Dejará de mostrarse en el inventario; si tiene existencia registrada, esta quedará oculta.`}
             />
         </div>
     );

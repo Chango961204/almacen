@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { getSalidas, crearSalida } from "../services/salidaService";
 import { getProyectos } from "../services/proyectoService";
-import { getArticulos } from "../services/articuloService";
 import PageHeader from "../components/PageHeader";
 import Table from "../components/Table";
 import SalidaModal from "../components/SalidaModal";
@@ -16,7 +15,6 @@ function formatearFecha(iso) {
 export default function Salidas() {
     const [salidas, setSalidas] = useState([]);
     const [proyectos, setProyectos] = useState([]);
-    const [articulos, setArticulos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [modalAbierto, setModalAbierto] = useState(false);
@@ -37,7 +35,6 @@ export default function Salidas() {
     useEffect(() => {
         cargarSalidas();
         getProyectos().then(setProyectos).catch(() => setProyectos([]));
-        getArticulos().then(setArticulos).catch(() => setArticulos([]));
         // eslint-disable-next-line
     }, []);
 
@@ -87,7 +84,6 @@ export default function Salidas() {
                 onClose={() => setModalAbierto(false)}
                 onSave={handleSave}
                 proyectos={proyectos}
-                articulos={articulos}
             />
         </div>
     );

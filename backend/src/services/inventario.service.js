@@ -6,6 +6,10 @@ export const obtenerInventarioAlmacen = async () => {
             cantidadActual: {
                 gt: 0,
             },
+            // No mostrar artículos eliminados (soft delete: activo = false)
+            articulo: {
+                activo: true,
+            },
         },
         include: {
             articulo: {
@@ -42,6 +46,10 @@ export const obtenerInventarioProyecto = async (proyectoId) => {
             proyectoId,
             cantidadActual: {
                 gt: 0,
+            },
+            // No mostrar artículos eliminados (soft delete: activo = false)
+            articulo: {
+                activo: true,
             },
         },
         include: {

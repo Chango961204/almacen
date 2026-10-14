@@ -42,7 +42,7 @@ export default function Home() {
                 ]);
 
                 setEstadisticas({
-                    articulos: articulos.length,
+                    articulos: articulos.filter((a) => a.activo).length,
                     proyectos: proyectos.filter((proyecto) => proyecto.activo).length,
                     movimientos: entradas.length + salidas.length + devoluciones.length,
                     existencias: inventario.reduce((total, fila) => total + Number(fila.cantidadActual || 0), 0),

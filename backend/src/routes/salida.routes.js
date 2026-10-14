@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
+import { authorizeRoles } from "../middlewares/role.middleware.js";
 import { validate } from "../middlewares/validation.middleware.js";
 import { crearSalida, obtenerTodas } from "../controllers/salida.controller.js";
 import { crearSalidaSchema } from "../validations/salida.validation.js";
@@ -8,8 +9,9 @@ import { crearSalidaSchema } from "../validations/salida.validation.js";
 const router = Router();
 
 router.use(authMiddleware);
+router.use(authorizeRoles("SUPER_ADMIN", "ADMIN"));
 
 router.post("/", validate(crearSalidaSchema), crearSalida);
 router.get("/", obtenerTodas);
-    
+
 export default router;

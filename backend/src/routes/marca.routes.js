@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import authMiddleware from "../middlewares/auth.middleware.js";
+import { authorizeRoles } from "../middlewares/role.middleware.js";
 import { validate } from "../middlewares/validation.middleware.js";
 
 import { crear, obtenerTodas, obtenerPorId, actualizar } from "../controllers/marca.controller.js";
@@ -12,6 +13,7 @@ import { crearMarcaSchema, actualizarMarcaSchema } from "../validations/marca.va
 const router = Router();
 
 router.use(authMiddleware);
+router.use(authorizeRoles("SUPER_ADMIN", "ADMIN"));
 
 router.get("/", obtenerTodas);
 

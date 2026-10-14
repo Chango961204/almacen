@@ -18,6 +18,23 @@ export const crearSalida = async (data, usuarioId) => {
             throw error;
         }
 
+        const articulosSolicitados = data.detalles.map(
+            (detalle) => detalle.articuloId
+        );
+
+        const hayArticulosDuplicados =
+            new Set(articulosSolicitados).size !==
+            articulosSolicitados.length;
+
+        if (hayArticulosDuplicados) {
+            const error = new Error(
+                "No se puede repetir el mismo artículo en una salida"
+            );
+
+            error.statusCode = 400;
+            throw error;
+        }
+
         const salida = await tx.salida.create({
             data: {
                 folio: data.folio,
@@ -30,6 +47,30 @@ export const crearSalida = async (data, usuarioId) => {
         });
 
         for (const detalle of data.detalles) {
+
+            const articulo = await tx.articulo.findUnique({
+                where: {
+                    id: detalle.articuloId,
+                },
+            });
+
+            if (!articulo) {
+                const error = new Error(
+                    `El artículo ${detalle.articuloId} no existe`
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
+
+            if (!articulo.activo) {
+                const error = new Error(
+                    `El artículo ${articulo.nombre} está inactivo`
+                );
+
+                error.statusCode = 400;
+                throw error;
+            }
 
             const inventarioProyecto =
                 await tx.inventarioProyecto.findUnique({

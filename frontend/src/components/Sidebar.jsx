@@ -3,14 +3,14 @@ import { Boxes, FolderKanban, History, LayoutDashboard, PackageMinus, PackagePlu
 import { useAuth } from "../context/AuthContext";
 
 const menuItems = [
-    { to: "/", label: "Inicio", icon: LayoutDashboard },
-    { to: "/proyectos", label: "Proyectos", icon: FolderKanban },
-    { to: "/articulos", label: "Artículos", icon: Boxes },
-    { to: "/entradas", label: "Entradas", icon: PackagePlus },
-    { to: "/inventario", label: "Inventario", icon: Warehouse },
-    { to: "/salidas", label: "Salidas", icon: PackageMinus },
-    { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw },
-    { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN",] },
+    { to: "/", label: "Inicio", icon: LayoutDashboard, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/proyectos", label: "Proyectos", icon: FolderKanban, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/articulos", label: "Artículos", icon: Boxes, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/entradas", label: "Entradas", icon: PackagePlus, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/inventario", label: "Inventario", icon: Warehouse, roles: ["SUPER_ADMIN", "ADMIN", "USUARIO"] },
+    { to: "/salidas", label: "Salidas", icon: PackageMinus, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/devoluciones", label: "Devoluciones", icon: RotateCcw, roles: ["SUPER_ADMIN", "ADMIN"] },
+    { to: "/usuarios", label: "Usuarios", icon: Users, roles: ["SUPER_ADMIN", "ADMIN"] },
     { to: "/auditorias", label: "Auditorías", icon: History, roles: ["SUPER_ADMIN"] },
 ];
 
