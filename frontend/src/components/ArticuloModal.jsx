@@ -119,13 +119,19 @@ export default function ArticuloModal({ open, onClose, onSave, articulo, marcas,
         setGuardando(true);
 
         try {
+            const nombreLimpio = nombre.trim().replace(/\s+/g, " ");
+
+            if (!nombreLimpio) {
+                throw new Error("El nombre del artículo es obligatorio");
+            }
+
             const marcaId = await resolverMarca();
             const resueltaUnidadId = await resolverUnidad();
 
             await onSave({
-                codigo: codigo || undefined,
-                nombre,
-                especificaciones: especificaciones || undefined,
+                codigo: codigo.trim() || undefined,
+                nombre: nombreLimpio,
+                especificaciones: especificaciones.trim() || undefined,
                 marcaId,
                 unidadMedidaId: resueltaUnidadId,
             });

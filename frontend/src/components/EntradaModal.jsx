@@ -30,7 +30,7 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
     }, [open]);
 
     function agregarDetalle() {
-        setDetalles([...detalles, { proyectoId: "", articulo: "", cantidad: "" }]);
+        setDetalles([...detalles, { proyectoId: "", articuloId: "", cantidad: "" }]);
     }
 
     function actualizarDetalle(indice, campo, valor) {
@@ -41,37 +41,17 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
         setDetalles(detalles.filter((_, i) => i !== indice));
     }
 
-    // Convierte el artículo escrito (texto libre) en su id.
-    // Si el nombre no existe en el catálogo, cancela el guardado.
-    function resolverArticulos(detallesValidos) {
-        return detallesValidos.map((d) => {
-            const nombre = d.articulo.trim();
-
-            const articulo = articulos.find(
-                (a) => a.nombre.toLowerCase() === nombre.toLowerCase()
-            );
-
-            if (!articulo) {
-                const error = new Error(
-                    `El artículo "${nombre}" no existe. Regístralo primero en Artículos`
-                );
-                throw error;
-            }
-
-            return {
-                proyectoId: Number(d.proyectoId),
-                articuloId: articulo.id,
-                cantidad: Number(d.cantidad),
-            };
-        });
-    }
-
     async function handleSubmit(e) {
         e.preventDefault();
 
         const detallesValidos = detalles.filter(
-            (d) => d.proyectoId && d.articulo.trim() && d.cantidad
+            (d) => d.proyectoId && d.articuloId && Number(d.cantidad) > 0
         );
+
+        if (detallesValidos.length === 0) {
+            toast.error("Agrega al menos un artículo con proyecto y cantidad");
+            return;
+        }
 
         setGuardando(true);
 
@@ -83,10 +63,18 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                 proveedor: proveedor || undefined,
                 distribuidor: distribuidor || undefined,
                 observaciones: observaciones || undefined,
-                detalles: resolverArticulos(detallesValidos),
+                detalles: detallesValidos.map((d) => ({
+                    proyectoId: Number(d.proyectoId),
+                    articuloId: Number(d.articuloId),
+                    cantidad: Number(d.cantidad),
+                })),
             });
         } catch (error) {
-            toast.error(error.message || "No se pudo registrar la entrada");
+            toast.error(
+                error.response?.data?.message ||
+                error.message ||
+                "No se pudo registrar la entrada"
+            );
         } finally {
             setGuardando(false);
         }
@@ -120,27 +108,24 @@ export default function EntradaModal({ open, onClose, onSave, proyectos, articul
                                         ))}
                                     </select>
 
-                                    <input
-                                        type="text"
-                                        value={d.articulo}
-                                        onChange={(e) => actualizarDetalle(index, "articulo", e.target.value)}
-                                        list="articulos-datalist"
+                                    <select
+                                        value={d.articuloId}
+                                        onChange={(e) => actualizarDetalle(index, "articuloId", e.target.value)}
                                         className="input-base col-span-2 py-2 text-sm sm:col-span-1"
-                                        placeholder="Escribe o elige un artículo"
-                                    />
+                                    >
+                                        <option value="">Artículo</option>
+                                        {articulos.filter((a) => a.activo).map((a) => (
+                                            <option key={a.id} value={a.id}>{a.nombre}</option>
+                                        ))}
+                                    </select>
 
-                                    <input type="number" value={d.cantidad} onChange={(e) => actualizarDetalle(index, "cantidad", e.target.value)} placeholder="Cant." className="input-base py-2 text-sm" />
+                                    <input type="number" min="0" step="any" value={d.cantidad} onChange={(e) => actualizarDetalle(index, "cantidad", e.target.value)} placeholder="Cant." className="input-base py-2 text-sm" />
 
                                     <button type="button" onClick={() => quitarDetalle(index)} className="btn btn-ghost btn-ghost-danger" title="Quitar">
                                         <Trash2 className="h-4 w-4" />
                                     </button>
                                 </div>
                             ))}
-                            <datalist id="articulos-datalist">
-                                {articulos.filter((a) => a.activo).map((a) => (
-                                    <option key={a.id} value={a.nombre} />
-                                ))}
-                            </datalist>
                         </div>
                     )}
                 </div>

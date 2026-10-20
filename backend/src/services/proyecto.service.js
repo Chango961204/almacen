@@ -1,22 +1,35 @@
 import * as proyectoRepository from "../repositories/proyecto.repository.js";
 import { registrar } from "./auditoria.service.js";
 
-export const crearProyecto = async (data, usuarioId) => {
-    const proyectoExistente =
-        await proyectoRepository.obtenerProyectos();
+const normalizarNombre = (nombre) =>
+    String(nombre || "").trim().replace(/\s+/g, " ");
 
-    const existe = proyectoExistente.some(
-        (p) => p.nombre.toLowerCase() === data.nombre.toLowerCase()
+export const crearProyecto = async (data, usuarioId) => {
+    const nombre = normalizarNombre(data.nombre);
+
+    if (!nombre) {
+        const error = new Error("El nombre del proyecto es obligatorio");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const proyectos = await proyectoRepository.obtenerProyectos();
+
+    // Solo un proyecto ACTIVO bloquea el nombre. Los proyectos eliminados
+    // (activo = false) conservan su nombre para el historial, pero permiten
+    // crear uno nuevo con el mismo nombre.
+    const existe = proyectos.some(
+        (p) => p.activo && p.nombre.toLowerCase() === nombre.toLowerCase()
     );
 
     if (existe) {
-        const error = new Error("Ya existe un proyecto con ese nombre");
+        const error = new Error("Ya existe un proyecto activo con ese nombre");
         error.statusCode = 400;
         throw error;
     }
 
     const proyecto = await proyectoRepository.crearProyecto({
-        nombre: data.nombre,
+        nombre,
         descripcion: data.descripcion || null,
         fechaInicio: data.fechaInicio
             ? new Date(data.fechaInicio)
@@ -56,8 +69,32 @@ export const obtenerProyecto = async (id) => {
 export const ActualizarProyecto = async (id, data, usuarioId) => {
     await obtenerProyecto(id);
 
+    const nombre = normalizarNombre(data.nombre);
+
+    if (!nombre) {
+        const error = new Error("El nombre del proyecto es obligatorio");
+        error.statusCode = 400;
+        throw error;
+    }
+
+    const proyectos = await proyectoRepository.obtenerProyectos();
+
+    const existe = proyectos.some(
+        (p) =>
+            p.activo &&
+            p.id !== id &&
+            p.nombre.toLowerCase() === nombre.toLowerCase()
+    );
+
+    if (existe) {
+        const error = new Error("Ya existe un proyecto activo con ese nombre");
+        error.statusCode = 400;
+        throw error;
+    }
+
     const proyecto = await proyectoRepository.actualizarProyecto(id, {
         ...data,
+        nombre,
         fechaInicio: data.fechaInicio
             ? new Date(data.fechaInicio)
             : null,

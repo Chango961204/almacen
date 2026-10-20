@@ -2,9 +2,19 @@ import * as articuloRepository from "../repositories/articulo.repository.js";
 import prisma from "../lib/prisma.js";
 import { registrar } from "./auditoria.service.js";
 
+const normalizarTexto = (valor) =>
+    String(valor || "").trim().replace(/\s+/g, " ");
+
 export const crearArticulo = async (data, usuarioId) => {
-    const proyectoExistente =
-        await articuloRepository.obtenerArticulos();
+    const nombre = normalizarTexto(data.nombre);
+    const codigo = normalizarTexto(data.codigo) || null;
+    const especificaciones = normalizarTexto(data.especificaciones) || null;
+
+    if (!nombre) {
+        const error = new Error("El nombre del artículo es obligatorio");
+        error.statusCode = 400;
+        throw error;
+    }
 
     const marca = await prisma.marca.findUnique({
         where: { id: data.marcaId },
@@ -27,9 +37,9 @@ export const crearArticulo = async (data, usuarioId) => {
     }
 
     const articulo = await articuloRepository.crearArticulo({
-        codigo: data.codigo || null,
-        nombre: data.nombre,
-        especificaciones: data.especificaciones || null,
+        codigo,
+        nombre,
+        especificaciones,
         marcaId: data.marcaId,
         unidadMedidaId: data.unidadMedidaId,
     });
@@ -64,7 +74,29 @@ export const obtenerArticulo = async (id) => {
 export const actualizarArticulo = async (id, data, usuarioId) => {
     await obtenerArticulo(id);
 
-    const articulo = await articuloRepository.actualizarArticulo(id, data);
+    const dataLimpia = { ...data };
+
+    if (data.nombre !== undefined) {
+        const nombre = normalizarTexto(data.nombre);
+
+        if (!nombre) {
+            const error = new Error("El nombre del artículo es obligatorio");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        dataLimpia.nombre = nombre;
+    }
+
+    if (data.codigo !== undefined) {
+        dataLimpia.codigo = normalizarTexto(data.codigo) || null;
+    }
+
+    if (data.especificaciones !== undefined) {
+        dataLimpia.especificaciones = normalizarTexto(data.especificaciones) || null;
+    }
+
+    const articulo = await articuloRepository.actualizarArticulo(id, dataLimpia);
 
     await registrar({
         usuarioId,

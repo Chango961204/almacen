@@ -67,7 +67,7 @@ model Usuario {
 
 model Proyecto {
   id          Int       @id @default(autoincrement())
-  nombre      String    @unique @db.VarChar(100)
+  nombre      String    @db.VarChar(100)
   descripcion String?   @db.Text
   fechaInicio DateTime? @db.Date
   fechaFin    DateTime? @db.Date

@@ -51,6 +51,20 @@ export default function Entradas() {
         }
     }
 
+    async function abrirModal() {
+        setModalAbierto(true);
+
+        // Refresca catálogos al abrir para que un artículo o proyecto
+        // recién creado aparezca de inmediato en los selectores.
+        try {
+            const [proys, arts] = await Promise.all([getProyectos(), getArticulos()]);
+            setProyectos(proys);
+            setArticulos(arts);
+        } catch {
+            // Si falla, se conserva lo que ya estaba cargado.
+        }
+    }
+
     const resumenArticulos = (entrada) =>
         (entrada.detalles || [])
             .map((d) => `${d.articulo?.nombre || "?"} x${d.cantidad}`)
@@ -70,7 +84,7 @@ export default function Entradas() {
 
     return (
         <div>
-            <PageHeader title="Entradas" subtitle="Registra y consulta entradas al almacén" onAdd={() => setModalAbierto(true)} addLabel="Nueva Entrada" />
+            <PageHeader title="Entradas" subtitle="Registra y consulta entradas al almacén" onAdd={abrirModal} addLabel="Nueva Entrada" />
 
             {error && <div className="alert-error">{error}</div>}
 

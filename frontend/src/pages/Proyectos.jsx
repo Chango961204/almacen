@@ -30,6 +30,10 @@ export default function Proyectos() {
     const [confirmarBorrar, setConfirmarBorrar] = useState(null);
     const [borrando, setBorrando] = useState(false);
 
+    // Por defecto solo se muestran los proyectos activos. Los eliminados
+    // conservan su nombre para el historial, pero no ensucian la vista.
+    const [mostrarInactivos, setMostrarInactivos] = useState(false);
+
     async function cargarProyectos() {
         setLoading(true);
         setError("");
@@ -88,6 +92,10 @@ export default function Proyectos() {
         }
     }
 
+    const proyectosVisibles = mostrarInactivos
+        ? proyectos
+        : proyectos.filter((proyecto) => proyecto.activo);
+
     const columns = [
         { key: "nombre", label: "Proyecto" },
         { key: "descripcion", label: "Descripción", render: (fila) => fila.descripcion || "-" },
@@ -106,11 +114,23 @@ export default function Proyectos() {
 
             {error && <div className="alert-error">{error}</div>}
 
+            <div className="mb-4 flex items-center justify-end">
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+                    <input
+                        type="checkbox"
+                        checked={mostrarInactivos}
+                        onChange={(e) => setMostrarInactivos(e.target.checked)}
+                        className="h-4 w-4 rounded border-slate-300"
+                    />
+                    Mostrar inactivos
+                </label>
+            </div>
+
             <Table
                 columns={columns}
-                rows={proyectos}
+                rows={proyectosVisibles}
                 loading={loading}
-                emptyMessage="No hay proyectos registrados"
+                emptyMessage={mostrarInactivos ? "No hay proyectos registrados" : "No hay proyectos activos"}
                 actions={(fila) => (
                     <>
                         <button onClick={() => abrirEditar(fila)} className="btn-icon" title="Editar">
