@@ -1,29 +1,37 @@
 import prisma from "../lib/prisma.js";
 
+const incluirArticulo = {
+    articulo: {
+        include: {
+            marca: true,
+            unidadMedida: true,
+        },
+    },
+};
+
+const ordenarPorArticulo = {
+    articulo: {
+        nombre: "asc",
+    },
+};
+
+// Filtro compartido: solo existencias positivas de artículos activos.
+const soloExistenciasActivas = {
+    cantidadActual: {
+        gt: 0,
+    },
+    articulo: {
+        activo: true,
+    },
+};
+
 export const obtenerInventarioAlmacen = async () => {
     return prisma.inventarioAlmacen.findMany({
         where: {
-            cantidadActual: {
-                gt: 0,
-            },
-            // No mostrar artículos eliminados (soft delete: activo = false)
-            articulo: {
-                activo: true,
-            },
+            ...soloExistenciasActivas,
         },
-        include: {
-            articulo: {
-                include: {
-                    marca: true,
-                    unidadMedida: true,
-                },
-            },
-        },
-        orderBy: {
-            articulo: {
-                nombre: "asc",
-            },
-        },
+        include: incluirArticulo,
+        orderBy: ordenarPorArticulo,
     });
 };
 
@@ -44,26 +52,45 @@ export const obtenerInventarioProyecto = async (proyectoId) => {
     return prisma.inventarioProyecto.findMany({
         where: {
             proyectoId,
-            cantidadActual: {
-                gt: 0,
-            },
-            // No mostrar artículos eliminados (soft delete: activo = false)
-            articulo: {
-                activo: true,
-            },
+            ...soloExistenciasActivas,
         },
-        include: {
-            articulo: {
-                include: {
-                    marca: true,
-                    unidadMedida: true,
-                },
-            },
-        },
-        orderBy: {
-            articulo: {
+        include: incluirArticulo,
+        orderBy: ordenarPorArticulo,
+    });
+};
+
+// Inventario completo para el reporte PDF:
+// - almacen: existencias del almacén general.
+// - proyectos: solo proyectos que tengan existencia, incluyendo los
+//   inactivos (con su bandera activo para marcarlos en el PDF).
+export const obtenerInventarioGeneral = async () => {
+    const [almacen, proyectos] = await Promise.all([
+        obtenerInventarioAlmacen(),
+        prisma.proyecto.findMany({
+            orderBy: {
                 nombre: "asc",
             },
-        },
-    });
+            include: {
+                inventarios: {
+                    where: {
+                        ...soloExistenciasActivas,
+                    },
+                    include: incluirArticulo,
+                    orderBy: ordenarPorArticulo,
+                },
+            },
+        }),
+    ]);
+
+    return {
+        almacen,
+        proyectos: proyectos
+            .filter((proyecto) => proyecto.inventarios.length > 0)
+            .map((proyecto) => ({
+                id: proyecto.id,
+                nombre: proyecto.nombre,
+                activo: proyecto.activo,
+                inventarios: proyecto.inventarios,
+            })),
+    };
 };

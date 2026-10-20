@@ -31,3 +31,17 @@ export const inventarioProyecto = async (req, res, next) => {
         next(error);
     }
 }
+
+export const inventarioGeneral = async (req, res, next) => {
+    try {
+        const inventario =
+            await inventarioService.obtenerInventarioGeneral();
+
+        res.json({
+            ok: true,
+            data: inventario,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
