@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getInventarioAlmacen, getInventarioGeneral, getInventarioProyecto } from "../services/inventarioService.js";
+import { getInventarioAlmacen, getInventarioGeneral, getInventarioProyecto, getReporteProyecto } from "../services/inventarioService.js";
 import { getProyectos } from "../services/proyectoService.js";
 import { Warehouse, FolderKanban, FileDown } from "lucide-react";
 import toast from "react-hot-toast";
@@ -7,10 +7,22 @@ import PageHeader from "../components/PageHeader.jsx";
 import Table from "../components/Table.jsx";
 import Badge from "../components/Badge.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { exportarInventarioGeneralPdf, exportarInventarioProyectoPdf } from "../utils/inventarioPdf.js";
+import { exportarInventarioGeneralPdf, exportarInventarioProyectoPdf, exportarReporteProyectoPdf } from "../utils/pdf/index.js";
+
+function formatearFechaCorta(iso) {
+    if (!iso) return "—";
+
+    const [anio, mes, dia] = String(iso).slice(0, 10).split("-");
+
+    if (!anio || !mes || !dia) return "—";
+
+    return `${dia}/${mes}/${anio}`;
+}
 
 export default function Inventario() {
     const { usuario } = useAuth();
+    const puedeVerHistorial =
+        usuario?.rol === "SUPER_ADMIN" || usuario?.rol === "ADMIN";
 
     const [vista, setVista] = useState("almacen");
 
@@ -23,6 +35,7 @@ export default function Inventario() {
 
     const [proyectos, setProyectos] = useState([]);
     const [proyectoId, setProyectoId] = useState("");
+    const [mostrarInactivos, setMostrarInactivos] = useState(false);
 
     const [generando, setGenerando] = useState(null);
 
@@ -75,14 +88,38 @@ export default function Inventario() {
         setGenerando("proyecto");
 
         try {
-            await exportarInventarioProyectoPdf({ proyecto, filas: inventario, usuario });
+            if (puedeVerHistorial) {
+                const reporte = await getReporteProyecto(proyecto.id);
 
-            toast.success("PDF del proyecto generado");
+                await exportarReporteProyectoPdf({ reporte, usuario });
+
+                toast.success("Reporte del proyecto generado");
+            } else {
+                await exportarInventarioProyectoPdf({ proyecto, filas: inventario, usuario });
+
+                toast.success("PDF del proyecto generado");
+            }
         } catch (error) {
             console.error(error);
             toast.error(error.response?.data?.message || "No se pudo generar el PDF del proyecto");
         } finally {
             setGenerando(null);
+        }
+    }
+
+    function handleMostrarInactivos(event) {
+        const checked = event.target.checked;
+
+        setMostrarInactivos(checked);
+
+        if (!checked) {
+            const seleccionado = proyectos.find(
+                (proyecto) => String(proyecto.id) === String(proyectoId)
+            );
+
+            if (seleccionado && !seleccionado.activo) {
+                setProyectoId("");
+            }
         }
     }
 
@@ -112,6 +149,9 @@ export default function Inventario() {
     }, [vista, proyectoId]);
 
     const proyectoSeleccionado = proyectos.find((p) => String(p.id) === String(proyectoId));
+    const proyectosVisibles = proyectos.filter(
+        (proyecto) => proyecto.activo || mostrarInactivos
+    );
 
     return (
         <div className="animate-fade-in">
@@ -138,7 +178,7 @@ export default function Inventario() {
                         className="btn btn-secondary"
                     >
                         <FileDown className={`h-4 w-4 ${generando === "general" ? "animate-pulse" : ""}`} />
-                        {generando === "general" ? "Generando…" : "PDF general"}
+                        {generando === "general" ? "Generando…" : "PDF general (resumen)"}
                     </button>
 
                     {vista === "proyecto" && (
@@ -149,22 +189,43 @@ export default function Inventario() {
                             className="btn btn-secondary"
                         >
                             <FileDown className={`h-4 w-4 ${generando === "proyecto" ? "animate-pulse" : ""}`} />
-                            {generando === "proyecto" ? "Generando…" : "PDF del proyecto"}
+                            {generando === "proyecto"
+                                ? "Generando…"
+                                : puedeVerHistorial
+                                    ? "PDF del proyecto (historial)"
+                                    : "PDF del proyecto"}
                         </button>
                     )}
                 </div>
             </div>
 
             {vista === "proyecto" && (
-                <div className="mb-4 flex max-w-md items-center gap-3 animate-slide-down">
+                <div className="mb-4 flex max-w-4xl flex-col gap-3 animate-slide-down sm:flex-row sm:items-center">
                     <label className="text-sm font-medium text-slate-700">Proyecto</label>
-                    <select value={proyectoId} onChange={(e) => setProyectoId(e.target.value)} className="input-base">
+                    <select value={proyectoId} onChange={(e) => setProyectoId(e.target.value)} className="input-base flex-1">
                         <option value="">Selecciona un proyecto</option>
-                        {proyectos.filter((p) => p.activo).map((p) => (
-                            <option key={p.id} value={p.id}>{p.nombre}</option>
+                        {proyectosVisibles.map((p) => (
+                            <option key={p.id} value={p.id}>
+                                {p.nombre} · #{p.id} · {p.activo ? "Activo" : "Inactivo"} · creado {formatearFechaCorta(p.creadoEn)}
+                            </option>
                         ))}
                     </select>
+                    <label className="flex cursor-pointer items-center gap-2 whitespace-nowrap text-sm text-slate-600">
+                        <input
+                            type="checkbox"
+                            checked={mostrarInactivos}
+                            onChange={handleMostrarInactivos}
+                            className="h-4 w-4 rounded border-slate-300"
+                        />
+                        Mostrar inactivos
+                    </label>
                 </div>
+            )}
+
+            {puedeVerHistorial && vista === "proyecto" && (
+                <p className="mb-4 text-xs text-slate-500">
+                    El PDF del proyecto incluye datos de creación, inventario actual, entradas, salidas, devoluciones y acta de entrega.
+                </p>
             )}
 
             {error && <div className="alert-error">{error}</div>}

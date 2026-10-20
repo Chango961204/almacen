@@ -12,4 +12,8 @@ export async function getInventarioGeneral(){
     const response = await api.get("/inventario/general");
     return response.data.data;
 }
+export async function getReporteProyecto(proyectoId){
+    const response = await api.get(`/inventario/proyecto/${proyectoId}/reporte`);
+    return response.data.data;
+}
 

@@ -45,3 +45,19 @@ export const inventarioGeneral = async (req, res, next) => {
         next(error);
     }
 };
+
+export const reporteProyecto = async (req, res, next) => {
+    try {
+        const proyectoId = Number(req.params.proyectoId);
+
+        const reporte =
+            await inventarioService.obtenerReporteProyecto(proyectoId);
+
+        res.json({
+            ok: true,
+            data: reporte,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
