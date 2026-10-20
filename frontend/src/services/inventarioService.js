@@ -8,4 +8,8 @@ export async function getInventarioProyecto(proyectoId){
     const response = await api.get(`/inventario/proyecto/${proyectoId}`);
     return response.data.data;
 }
+export async function getInventarioGeneral(){
+    const response = await api.get("/inventario/general");
+    return response.data.data;
+}
 

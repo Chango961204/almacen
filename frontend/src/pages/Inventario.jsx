@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { getInventarioAlmacen, getInventarioProyecto } from "../services/inventarioService.js";
+import { getInventarioAlmacen, getInventarioGeneral, getInventarioProyecto } from "../services/inventarioService.js";
 import { getProyectos } from "../services/proyectoService.js";
-import { Warehouse, FolderKanban } from "lucide-react";
+import { Warehouse, FolderKanban, FileDown } from "lucide-react";
+import toast from "react-hot-toast";
 import PageHeader from "../components/PageHeader.jsx";
 import Table from "../components/Table.jsx";
 import Badge from "../components/Badge.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { exportarInventarioGeneralPdf, exportarInventarioProyectoPdf } from "../utils/inventarioPdf.js";
 
 export default function Inventario() {
+    const { usuario } = useAuth();
+
     const [vista, setVista] = useState("almacen");
 
     const [loading, setLoading] = useState(true);
@@ -18,6 +23,8 @@ export default function Inventario() {
 
     const [proyectos, setProyectos] = useState([]);
     const [proyectoId, setProyectoId] = useState("");
+
+    const [generando, setGenerando] = useState(null);
 
     async function cargarDatos() {
         setLoading(true);
@@ -37,6 +44,45 @@ export default function Inventario() {
 
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function exportarGeneralPdf() {
+        setGenerando("general");
+
+        try {
+            const datos = await getInventarioGeneral();
+
+            await exportarInventarioGeneralPdf({ ...datos, usuario });
+
+            toast.success("PDF general generado");
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.message || "No se pudo generar el PDF general");
+        } finally {
+            setGenerando(null);
+        }
+    }
+
+    async function exportarProyectoPdf() {
+        const proyecto = proyectos.find((p) => String(p.id) === String(proyectoId));
+
+        if (!proyecto) {
+            toast.error("Selecciona un proyecto");
+            return;
+        }
+
+        setGenerando("proyecto");
+
+        try {
+            await exportarInventarioProyectoPdf({ proyecto, filas: inventario, usuario });
+
+            toast.success("PDF del proyecto generado");
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.message || "No se pudo generar el PDF del proyecto");
+        } finally {
+            setGenerando(null);
         }
     }
 
@@ -65,20 +111,48 @@ export default function Inventario() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vista, proyectoId]);
 
+    const proyectoSeleccionado = proyectos.find((p) => String(p.id) === String(proyectoId));
+
     return (
         <div className="animate-fade-in">
             <PageHeader title="Inventario" subtitle="Consulta las existencias del almacén y por proyecto" />
-            <div className="mb-6 inline-flex rounded-full border border-white/60 bg-white/40 p-1.5 backdrop-blur-xl">
-                <button onClick={() => setVista("almacen")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "almacen" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
-                    <Warehouse className="h-4 w-4" />
-                    Almacén
-                </button>
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="inline-flex rounded-full border border-white/60 bg-white/40 p-1.5 backdrop-blur-xl">
+                    <button onClick={() => setVista("almacen")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "almacen" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
+                        <Warehouse className="h-4 w-4" />
+                        Almacén
+                    </button>
 
-                <button onClick={() => setVista("proyecto")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "proyecto" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
-                    <FolderKanban className="h-4 w-4" />
-                    Por Proyecto
-                </button>
+                    <button onClick={() => setVista("proyecto")} className={`flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ${vista === "proyecto" ? "bg-white text-blue-700 shadow-sm" : "text-slate-500 hover:text-slate-900"}`}>
+                        <FolderKanban className="h-4 w-4" />
+                        Por Proyecto
+                    </button>
 
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={exportarGeneralPdf}
+                        disabled={generando !== null}
+                        className="btn btn-secondary"
+                    >
+                        <FileDown className={`h-4 w-4 ${generando === "general" ? "animate-pulse" : ""}`} />
+                        {generando === "general" ? "Generando…" : "PDF general"}
+                    </button>
+
+                    {vista === "proyecto" && (
+                        <button
+                            type="button"
+                            onClick={exportarProyectoPdf}
+                            disabled={!proyectoSeleccionado || generando !== null}
+                            className="btn btn-secondary"
+                        >
+                            <FileDown className={`h-4 w-4 ${generando === "proyecto" ? "animate-pulse" : ""}`} />
+                            {generando === "proyecto" ? "Generando…" : "PDF del proyecto"}
+                        </button>
+                    )}
+                </div>
             </div>
 
             {vista === "proyecto" && (
